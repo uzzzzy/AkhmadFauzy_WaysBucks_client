@@ -9,7 +9,6 @@ import '../../styles/pages/admin/Dashboard.css'
 const limit = 4
 
 export default function Dashboard() {
-    const [products, setProducts] = useState()
     const [list, setList] = useState()
     const [fetch, setFetch] = useState(true)
 
@@ -80,7 +79,7 @@ export default function Dashboard() {
                         <div className="tabcontent">
                             <ul>
                                 {list?.map((item) => (
-                                    <Item key={item.id} item={item} setItem={setItem} />
+                                    <Item key={item.id} tab={tab} item={item} setItem={setItem} />
                                 ))}
                             </ul>
                         </div>
@@ -91,30 +90,26 @@ export default function Dashboard() {
             </div>
 
             {count > limit && (
-                <div className="w-100 text-right">
-                    <button className="btn btn-primary" onClick={prevBtn}>
-                        Prev
-                    </button>
-                    {page + 1}
-                    <button className="btn btn-primary" onClick={nextBtn}>
-                        Next
-                    </button>
+                <div className="pagination">
+                    <p onClick={prevBtn}>&laquo;</p>
+                    <p>{page + 1}</p>
+                    <p onClick={nextBtn}>&raquo;</p>
                 </div>
             )}
         </div>
     )
 }
 
-function Item({ item, setItem }) {
+function Item({ tab, item, setItem }) {
     return (
         <li key={item.id} className={'item ' + item.status}>
             <img src={item.image} alt="topping-img" width="50px" />
             <span>
-                <h3>{item.title + item.id}</h3>
+                <h3>{item.title}</h3>
                 <h5>{numberToPrice(item.price)}</h5>
             </span>
             <div className="action">
-                <Link to={`/update-product/${item.id}`}>
+                <Link to={`/update-${tab}/${item.id}`}>
                     <button>Update</button>
                 </Link>
                 <button id={item.id} onClick={() => setItem(item.id)}>
@@ -129,14 +124,14 @@ function Preview({ item, id, fetch, setFetch }) {
     const setItemStatus = (e) => {
         if (e.target.id === 'delete')
             api.delete(`/${item}/` + id)
-                .then((res) => console.log(res))
+                .then((res) => res)
                 .catch((err) => err)
 
         if (e.target.id === 'available')
             api.patch(`/${item}/` + id, {
                 status: 'available',
             })
-                .then((res) => console.log(res))
+                .then((res) => res)
                 .catch((err) => err)
 
         setFetch(true)

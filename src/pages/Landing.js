@@ -17,6 +17,7 @@ export default function Landing({ user, setModal }) {
             params: {
                 limit: 4,
                 offset: 0,
+                order: 'id,desc',
             },
         }
 
@@ -51,7 +52,7 @@ export default function Landing({ user, setModal }) {
             <section className="menu">
                 <div className="menu-header">
                     <h1>Let's Order</h1>
-                    <button>All Menu</button>
+                    <button>All Menu &raquo;</button>
                 </div>
                 <div className="grid">
                     {coffees?.map((item, i) => (

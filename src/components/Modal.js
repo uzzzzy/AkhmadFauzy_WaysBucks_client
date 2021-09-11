@@ -10,6 +10,7 @@ export default function Modal({ modalOpt, modalMessage, setModal, setToken }) {
         email: '',
         password: '',
     })
+    const [error, setError] = useState()
     let history = useHistory()
 
     const closeModal = (e) => {
@@ -51,16 +52,23 @@ export default function Modal({ modalOpt, modalMessage, setModal, setToken }) {
 
             api.post(`/${modalOpt}`, config)
                 .then((res) => {
+                    setModal({
+                        modal: true,
+                        modalOpt: 'success',
+                        modalMessage: `${modalOpt} Success`,
+                    })
                     setToken(res.data.data.token)
                     localStorage.token = res.data.data.token
                 })
-                .catch((err) => err)
+                .catch((err) => setError(err.response.data.message))
         }
 
         return (
             <div id="modal" className="modal" onClick={closeModal}>
                 <form className="modal-content" onSubmit={handleSubmit}>
                     <h2>{modalOpt}</h2>
+
+                    {error && <div className="alert">{error}</div>}
 
                     {modalOpt === 'register' ? <input name="fullName" className="form-control w-100" placeholder="Fullname" onChange={handleOnChange} /> : null}
                     <input name="email" className="form-control w-100" placeholder="Email" onChange={handleOnChange} />

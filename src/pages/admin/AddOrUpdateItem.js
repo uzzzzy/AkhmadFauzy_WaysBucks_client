@@ -7,7 +7,7 @@ import attachment from '../../assets/img-attachment.svg'
 import '../../styles/pages/admin/AddUpdateItem.css'
 
 export default function AddOrUpdateItem({ setModal }) {
-    const [preview, setPreview] = useState('http://www.boc.web.id/wp-content/plugins/photonic/include/images/placeholder.png')
+    const [preview, setPreview] = useState()
     const [form, setForm] = useState({
         title: '',
         image: '',
@@ -28,7 +28,14 @@ export default function AddOrUpdateItem({ setModal }) {
                     })
                 })
                 .catch((err) => err)
-        } else {
+        }
+        if (mod === 'add') {
+            setForm({
+                title: '',
+                image: '',
+                price: 0,
+            })
+            setPreview('http://www.boc.web.id/wp-content/plugins/photonic/include/images/placeholder.png')
         }
     }, [mod, item, id])
 
@@ -63,9 +70,7 @@ export default function AddOrUpdateItem({ setModal }) {
                     history.push('/')
                 })
                 .catch((error) => {
-                    if (error.response) {
-                        console.log(error.response.data.message)
-                    }
+                    setModal({ modal: true, modalOpt: 'success', modalMessage: error.response.data.message })
                 })
         else if (mod === 'update')
             api.patch(`/${item}/${id}`, formData, {
@@ -79,7 +84,7 @@ export default function AddOrUpdateItem({ setModal }) {
                 })
                 .catch((error) => {
                     if (error.response) {
-                        console.log(error.response.data.message)
+                        setModal({ modal: true, modalOpt: 'success', modalMessage: error.response.data.message })
                     }
                 })
     }
@@ -92,11 +97,11 @@ export default function AddOrUpdateItem({ setModal }) {
 
                     <input name="title" placeholder={form.title ? form.title : `${item.charAt(0).toUpperCase() + item.slice(1)} Name`} type="text" className="form-control" onChange={handleOnChange} />
 
-                    <input name="price" placeholder={form.price ? form.price : 'Price'} type="text" className="form-control" onChange={handleOnChange} />
+                    <input name="price" placeholder={form.price ? form.price : 'Price'} type="number" className="form-control" onChange={handleOnChange} />
 
                     <label htmlFor="upload-photo">
                         <div className="form-control img-field" style={{ color: 'rgba(191, 154, 154, 0.5)', fontWeight: '300', cursor: 'pointer' }}>
-                            {form.image[0] ? form.image[0].name : 'Photo ' + item.charAt(0).toUpperCase() + item.slice(1)}
+                            {form.image[0]?.name ? form.image[0].name + ' ' : 'Photo ' + item.charAt(0).toUpperCase() + item.slice(1)}
                             <img className="attachment" src={attachment} alt="attachment" />
                         </div>
                     </label>

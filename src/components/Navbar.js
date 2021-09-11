@@ -58,6 +58,7 @@ export default function Navbar({ modal, token, user, setToken, setModal }) {
                 localStorage.removeItem('token')
                 break
             default:
+                break
         }
     }
 
@@ -80,7 +81,7 @@ export default function Navbar({ modal, token, user, setToken, setModal }) {
                     </>
                 ) : (
                     <>
-                        {user?.status === 'user' ? (
+                        {user?.status === 'customer' ? (
                             <li>
                                 <div id="cart" className="cart" onClick={() => handleBtn('cart')}>
                                     <p className="cart-number">#1</p>

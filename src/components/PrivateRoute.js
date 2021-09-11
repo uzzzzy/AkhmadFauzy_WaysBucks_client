@@ -8,7 +8,7 @@ export default function PrivateRoute({ role: status, user, component: Component,
             {...rest}
             render={() => {
                 if (user?.status === role) {
-                    return <Component />
+                    return <Component {...rest} />
                 } else {
                     return <Redirect to="/" />
                 }
