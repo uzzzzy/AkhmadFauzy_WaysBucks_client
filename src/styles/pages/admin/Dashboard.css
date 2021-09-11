@@ -1,0 +1,117 @@
+.tab {
+    overflow: hidden;
+    background-color: #bd0707;
+    border-radius: 10px;
+    display: inline-flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tablinks {
+    background-color: inherit;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    margin-bottom: 0;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #f6dada;
+    color: #bd0707;
+}
+.tab {
+    margin-bottom: 20px;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    padding: 6px 12px;
+    background-color: #f6dada;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-top: none;
+}
+
+.tabcontent .item {
+    display: inline-flex;
+    width: 100%;
+    margin: 20px 0;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.tabcontent .item .action {
+    display: inline-grid;
+}
+
+.tabcontent .item:hover {
+    background-color: #bd0707;
+    border-radius: 10px;
+}
+
+.tabcontent .item:hover h3,
+.tabcontent .item:hover h5 {
+    color: white;
+}
+
+.item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.tabcontent .item span {
+    padding-left: 20px;
+    width: 100%;
+}
+
+.tabcontent .item button {
+    background-color: #bd0707;
+    color: white;
+    border: none;
+    margin: 2px 0;
+    height: 25px;
+    width: 100px;
+    padding: 0 10px;
+    border-radius: 5px;
+}
+
+.tabcontent .item:hover button {
+    background-color: white;
+    color: #bd0707;
+}
+
+.disabled {
+    border-radius: 10px;
+    color: gray;
+    background-color: rgba(246, 246, 246, 0.479);
+}
+
+.preview {
+    text-align: center;
+}
+.preview h1 {
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.preview h2 {
+    color: gray;
+}
+
+.preview img {
+    object-fit: cover;
+    height: 300px;
+    width: 100%;
+}
