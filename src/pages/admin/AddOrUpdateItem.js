@@ -96,7 +96,7 @@ export default function AddOrUpdateItem({ setModal }) {
 
                     <label htmlFor="upload-photo">
                         <div className="form-control img-field" style={{ color: 'rgba(191, 154, 154, 0.5)', fontWeight: '300', cursor: 'pointer' }}>
-                            {form.image[0] ? form.image[0].name : 'Photo' + item.charAt(0).toUpperCase() + item.slice(1)}
+                            {form.image[0] ? form.image[0].name : 'Photo ' + item.charAt(0).toUpperCase() + item.slice(1)}
                             <img className="attachment" src={attachment} alt="attachment" />
                         </div>
                     </label>

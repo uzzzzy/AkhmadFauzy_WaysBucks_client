@@ -1,0 +1,89 @@
+.intro {
+    display: flex;
+    justify-content: space-between;
+}
+
+.jumbotron {
+    color: #fff;
+    background-color: #bd0707;
+    border-radius: 10px;
+    padding: 57px;
+    width: 90%;
+    padding-right: 350px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+}
+
+.jumbotron:hover {
+    background-blend-mode: soft-light;
+}
+
+.jumbotron h1 {
+    font-weight: 900;
+    font-size: 60px;
+    line-height: 65px;
+    color: #ffffff;
+}
+
+.jumbotron h3 {
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 33px;
+    color: #ffffff;
+}
+
+.jumbotron p {
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 25px;
+    color: #ffffff;
+}
+#img {
+    width: 10%;
+    margin: 1em 0;
+    margin-top: 28px;
+    margin-left: -330px;
+    height: 324px;
+    width: 452px;
+    object-fit: fit;
+    border-radius: 0 10px 10px 0;
+    vertical-align: middle;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-header button {
+    margin: 38px 0;
+    background: none;
+    border: 0;
+    margin: 38px 0;
+    font-weight: 900;
+    font-size: 25px;
+    line-height: 49px;
+    color: #bd0707;
+}
+
+.menu h1 {
+    margin: 38px 0;
+    font-weight: 900;
+    font-size: 36px;
+    line-height: 49px;
+    width: fit-content;
+}
+
+.menu h2 {
+    margin: 38px 0;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 49px;
+
+    justify-content: end;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}

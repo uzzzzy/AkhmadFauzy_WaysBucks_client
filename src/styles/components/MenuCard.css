@@ -1,0 +1,43 @@
+.card {
+    background: #f7dada;
+    border-radius: 10px;
+    display: inline-block;
+    margin: auto;
+    cursor: pointer;
+    margin: auto;
+    text-decoration: none;
+    margin-bottom: 30px;
+}
+
+.card img {
+    width: 220px;
+    height: 312px;
+    left: 196px;
+    top: 706px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease-in-out;
+}
+
+.label {
+    margin: 14px 16px 6px 16px;
+    max-width: 197px;
+}
+
+.card h3 {
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 25px;
+    color: #bd0707;
+}
+
+.card p {
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 19px;
+    color: #974a4a;
+}

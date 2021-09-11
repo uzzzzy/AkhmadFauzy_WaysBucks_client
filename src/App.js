@@ -5,8 +5,10 @@ import { api, setAuthToken } from './config/api'
 
 import Modal from './components/Modal'
 import Navbar from './components/Navbar'
+import PrivateRoute from './components/PrivateRoute'
 
 import Dashboard from './pages/admin/Dashboard'
+import Landing from './pages/Landing'
 import AddOrUpdateItem from './pages/admin/AddOrUpdateItem'
 
 import './styles/App.css'
@@ -39,11 +41,9 @@ export default function App() {
                 <main>
                     <Switch>
                         <Route exact path="/">
-                            {user?.status === 'admin' ? <Dashboard /> : '<Landing token={token} user={user} setModal={setModal} />'}
+                            {user?.status === 'admin' ? <Dashboard /> : <Landing token={token} user={user} setModal={setModal} />}
                         </Route>
-                        <Route path="/:mod-:item/:id?">
-                            <AddOrUpdateItem setModal={setModal} />
-                        </Route>
+                        <PrivateRoute role="admin" path="/:mod-:item/:id?" user={user} component={AddOrUpdateItem} setModal={setModal} />
                         <Route>Not Found</Route>
                     </Switch>
                 </main>

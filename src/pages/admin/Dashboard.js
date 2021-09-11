@@ -10,7 +10,7 @@ const limit = 4
 
 export default function Dashboard() {
     const [products, setProducts] = useState()
-    const [toppings, setToppings] = useState()
+    const [list, setList] = useState()
     const [fetch, setFetch] = useState(true)
 
     const [count, setCount] = useState()
@@ -32,7 +32,7 @@ export default function Dashboard() {
             api.get('/products', query)
                 .then((res) => {
                     setCount(res.data.data.count)
-                    setProducts(res.data.data.products)
+                    setList(res.data.data.products)
                 })
                 .catch((err) => err)
 
@@ -40,18 +40,11 @@ export default function Dashboard() {
             api.get('/toppings', query)
                 .then((res) => {
                     setCount(res.data.data.count)
-                    setToppings(res.data.data.toppings)
+                    setList(res.data.data.toppings)
                 })
                 .catch((err) => err)
         setFetch(false)
     }, [tab, page, item, fetch])
-
-    const deleteItem = (e) => {
-        api.delete(`/${tab}/` + e.target.id)
-            .then((res) => console.log(res))
-            .catch((err) => err)
-        setFetch(true)
-    }
 
     const handleTab = (e) => {
         setPage(0)
@@ -81,50 +74,13 @@ export default function Dashboard() {
                         Toppings
                     </button>
                 </div>
-                <div className="tab">Filter List</div>
-                {item ? <Preview item={tab} id={item} /> : null}
+                {item ? <Preview item={tab} id={item} fetch={fetch} setFetch={setFetch} /> : null}
                 <div className="app-inner-bar col">
-                    {tab === 'topping' ? (
+                    {tab === 'product' || tab === 'topping' ? (
                         <div className="tabcontent">
                             <ul>
-                                {toppings?.map((item) => (
-                                    <li key={item.id} className={'item ' + item.status} onClick={() => setItem(item.id)}>
-                                        <img src={item.image} alt="topping-img" />
-                                        <span>
-                                            <h3>{item.title}</h3>
-                                            <h5>{numberToPrice(item.price)}</h5>
-                                        </span>
-                                        <div className="action">
-                                            <Link to={`/update-topping/${item.id}`}>
-                                                <button>Update</button>
-                                            </Link>
-                                            <button id={item.id} onClick={deleteItem}>
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ) : tab === 'product' ? (
-                        <div id="Product" className="tabcontent">
-                            <ul>
-                                {products?.map((item) => (
-                                    <li key={item.id} className={'item ' + item.status}>
-                                        <img src={item.image} alt="topping-img" width="50px" />
-                                        <span>
-                                            <h3>{item.title + item.id}</h3>
-                                            <h5>{numberToPrice(item.price)}</h5>
-                                        </span>
-                                        <div className="action">
-                                            <Link to={`/update-product/${item.id}`}>
-                                                <button>Update</button>
-                                            </Link>
-                                            <button id={item.id} onClick={() => setItem(item.id)}>
-                                                View
-                                            </button>
-                                        </div>
-                                    </li>
+                                {list?.map((item) => (
+                                    <Item key={item.id} item={item} setItem={setItem} />
                                 ))}
                             </ul>
                         </div>
@@ -134,24 +90,62 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <div className="w-100 text-right">
-                <button className="btn btn-primary" onClick={prevBtn}>
-                    Next
-                </button>
-                {page + 1}
-                <button className="btn btn-primary" onClick={nextBtn}>
-                    Next
-                </button>
-            </div>
+            {count > limit && (
+                <div className="w-100 text-right">
+                    <button className="btn btn-primary" onClick={prevBtn}>
+                        Prev
+                    </button>
+                    {page + 1}
+                    <button className="btn btn-primary" onClick={nextBtn}>
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     )
 }
 
-function Preview({ item, id }) {
+function Item({ item, setItem }) {
+    return (
+        <li key={item.id} className={'item ' + item.status}>
+            <img src={item.image} alt="topping-img" width="50px" />
+            <span>
+                <h3>{item.title + item.id}</h3>
+                <h5>{numberToPrice(item.price)}</h5>
+            </span>
+            <div className="action">
+                <Link to={`/update-product/${item.id}`}>
+                    <button>Update</button>
+                </Link>
+                <button id={item.id} onClick={() => setItem(item.id)}>
+                    View
+                </button>
+            </div>
+        </li>
+    )
+}
+
+function Preview({ item, id, fetch, setFetch }) {
+    const setItemStatus = (e) => {
+        if (e.target.id === 'delete')
+            api.delete(`/${item}/` + id)
+                .then((res) => console.log(res))
+                .catch((err) => err)
+
+        if (e.target.id === 'available')
+            api.patch(`/${item}/` + id, {
+                status: 'available',
+            })
+                .then((res) => console.log(res))
+                .catch((err) => err)
+
+        setFetch(true)
+    }
+
     const [preview, setPreview] = useState()
     useEffect(() => {
         api.get(`/${item}/${id}`).then((res) => setPreview(res.data.data[item]))
-    }, [item, id])
+    }, [item, id, fetch])
 
     if (item === 'product' || item === 'topping')
         return (
@@ -162,6 +156,14 @@ function Preview({ item, id }) {
                         <img src={preview.image} alt="preview-img" />
                         <h2>{numberToPrice(preview.price)}</h2>
                         <h2>{preview.status}</h2>
+
+                        <button id="delete" className="btn btn-primary" onClick={setItemStatus}>
+                            Disable
+                        </button>
+
+                        <button id="available" className="btn btn-primary" onClick={setItemStatus}>
+                            Available
+                        </button>
                     </div>
                 )}
             </div>
