@@ -57,10 +57,9 @@
     color: #469f74 !important;
 }
 
-.alert {
+.error {
     padding: 10px;
-    background-color: #f44336; /* Red */
-    color: #f6dada;
+    color: #f44336;
     margin-bottom: 15px;
     width: 100%;
     border-radius: 10px;

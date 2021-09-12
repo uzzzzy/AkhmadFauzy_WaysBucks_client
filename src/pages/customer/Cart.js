@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { api } from '../../config/api'
 import { delayTime, numberToPrice } from '../../functions'
@@ -8,13 +9,16 @@ import Delete from '../../assets/delete.svg'
 
 import '../../styles/pages/customer/Cart.css'
 
-export default function Cart({ userP: user, setCartCounter }) {
+export default function Cart({ userP: user, setCartCounter, setModal }) {
+    const [preview, setPreview] = useState()
     const [cart, setCart] = useState()
     const [total, setTotal] = useState({
         subtotal: 0,
         qty: 0,
         total: 0,
     })
+
+    const history = useHistory()
 
     useEffect(() => {
         if (!cart) {
@@ -48,14 +52,46 @@ export default function Cart({ userP: user, setCartCounter }) {
         setCartCounter()
     }
 
-    const handleOnChange = () => {}
-    const payTarnsaction = () => {}
+    const handleOnChange = (e) => {
+        // Create image url for preview
+        if (e.target.type === 'file') {
+            let url = URL.createObjectURL(e.target.files[0])
+            setPreview(url)
+        }
+    }
+
+    const submitTransaction = (e) => {
+        e.preventDefault()
+        const item = 'transaction'
+
+        let formData = new FormData()
+
+        formData.append('fullName', e.target.elements.fullName?.value)
+        formData.append('email', e.target.elements.email?.value)
+        formData.append('phone', e.target.elements.phone?.value)
+        formData.append('poscode', e.target.elements.poscode?.value)
+        formData.append('address', e.target.elements.address?.value)
+        formData.append('image', e.target.elements.image?.files[0])
+
+        api.post(`/${item}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+            .then((res) => {
+                setModal({ modal: true, modalOpt: 'success', modalMessage: item + ' berhasil di tambahkan' })
+                history.push('/profile')
+            })
+            .catch((error) => {
+                setModal({ modal: true, modalOpt: 'error', modalMessage: error.response.data.message })
+            })
+    }
 
     return cart?.length > 0 ? (
         <div className="cart-container">
             <h2>My Cart</h2>
             <h3>Review Your Order</h3>
-            <form className="row">
+            <form className="row" onSubmit={submitTransaction}>
                 <div className="cart-list">
                     <hr />
                     <div className="cart-order">
@@ -89,23 +125,32 @@ export default function Cart({ userP: user, setCartCounter }) {
                         </div>
                         <div className="col">
                             <div className="attachment-section">
-                                <div className="attachment-group">
-                                    <div className="attachment-image">
-                                        <img src={Invoice} alt="attachment" />
+                                <label htmlFor="upload-photo">
+                                    <div className="attachment-group">
+                                        {preview ? (
+                                            <img className="attachment-image" src={preview} alt="preview" />
+                                        ) : (
+                                            <>
+                                                <div className="attachment-image">
+                                                    <img src={Invoice} alt="attachment" />
+                                                </div>
+                                                <span>Attache of Transaction</span>
+                                            </>
+                                        )}
                                     </div>
-                                    <span>Attache of Transaction</span>
-                                </div>
+                                </label>
+                                <input id="upload-photo" name="image" type="file" className="form-control image-upload" onChange={handleOnChange} />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="col cart-form">
-                    <input name="fullname" onChange={handleOnChange} className="form-control" placeholder="Name" value={user.fullName} />
-                    <input name="email" onChange={handleOnChange} className="form-control" placeholder="Email" value={user.email} />
-                    <input name="phone" onChange={handleOnChange} className="form-control" placeholder="Phone" />
-                    <input name="poscode" onChange={handleOnChange} className="form-control" placeholder="Pos code" />
-                    <textarea name="address" onChange={handleOnChange} className="form-control" placeholder="Address" />
-                    <button className="btn btn-primary" onClick={payTarnsaction}>
+                    <input name="fullName" className="form-control" placeholder="Full Name" />
+                    <input name="email" className="form-control" placeholder="Email" />
+                    <input name="phone" className="form-control" placeholder="Phone" />
+                    <input name="poscode" className="form-control" placeholder="Pos code" />
+                    <textarea name="address" className="form-control" placeholder="Address" />
+                    <button className="btn btn-primary" type="submit">
                         Pay
                     </button>
                 </div>

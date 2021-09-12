@@ -86,9 +86,9 @@ export default function Modal({ modalOpt, modalMessage, setModal, setToken }) {
                 </form>
             </div>
         )
-    } else if (modalOpt === 'success') {
+    } else if (modalOpt === 'success' || modalOpt === 'error') {
         return (
-            <div id="modal" className="modal success" onClick={closeModal}>
+            <div id="modal" className={`modal ${modalOpt}`} onClick={closeModal}>
                 <div className="modal-content">{modalMessage}</div>
             </div>
         )

@@ -129,6 +129,11 @@
     color: rgba(104, 50, 50, 0.5);
 }
 
+img.attachment-image {
+    width: 212px;
+    height: 118px;
+    object-fit: cover;
+}
 .attachment-image {
     display: flex;
     align-items: center;

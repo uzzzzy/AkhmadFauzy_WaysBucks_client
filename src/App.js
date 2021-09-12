@@ -58,7 +58,7 @@ export default function App() {
                         </Route>
                         <PrivateRoute role="admin" path="/:mod-:item/:id?" user={user} component={AddOrUpdateItem} setModal={setModal} />
                         <PrivateRoute path="/product/:id" user={user} component={Product} setModal={setModal} />
-                        <PrivateRoute path="/cart" user={user} component={Cart} userP={user} setCartCounter={setCartCounter} />
+                        <PrivateRoute path="/cart" user={user} component={Cart} userP={user} setModal={setModal} setCartCounter={setCartCounter} />
                         <Route>
                             <div className="lottie-container">
                                 <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_lwuTiS.json" background="transparent" speed="1" loop autoplay />
