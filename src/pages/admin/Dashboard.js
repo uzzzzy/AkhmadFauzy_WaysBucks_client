@@ -104,7 +104,7 @@ export default function Dashboard() {
                     ) : list?.length === 0 ? (
                         'noItem'
                     ) : (
-                        <div className="w-100 flex justify-center">
+                        <div className="lottie-container">
                             <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_YMim6w.json" background="transparent" speed="1" loop autoplay />
                         </div>
                     )}

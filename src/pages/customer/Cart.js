@@ -8,7 +8,7 @@ import Delete from '../../assets/delete.svg'
 
 import '../../styles/pages/customer/Cart.css'
 
-export default function Cart({ userP: user }) {
+export default function Cart({ userP: user, setCartCounter }) {
     const [cart, setCart] = useState()
     const [total, setTotal] = useState({
         subtotal: 0,
@@ -31,7 +31,22 @@ export default function Cart({ userP: user }) {
                     .catch((err) => err)
             }, delayTime * 1000)
         }
-    }, [cart, total])
+    }, [cart, total, setCartCounter])
+
+    const handleDelete = (id, subtotal, qty) => {
+        let filteredArray = cart.filter((item) => item.id !== id)
+        setCart(filteredArray)
+        setTotal({
+            subtotal: total.subtotal - subtotal * qty,
+            qty: total.qty - qty,
+            total: total.total - (subtotal * qty + subtotal * qty * 0.1),
+        })
+        api.delete('/cart/' + id)
+            .then((res) => res)
+            .catch((err) => err)
+
+        setCartCounter()
+    }
 
     const handleOnChange = () => {}
     const payTarnsaction = () => {}
@@ -45,7 +60,7 @@ export default function Cart({ userP: user }) {
                     <hr />
                     <div className="cart-order">
                         {cart?.map((item, i) => (
-                            <CartItem key={i} item={item} setCart={setCart} total={total} setTotal={setTotal} />
+                            <CartItem key={i} item={item} setCart={setCart} total={total} setTotal={setTotal} handleDelete={handleDelete} />
                         ))}
                     </div>
                     <hr />
@@ -97,38 +112,20 @@ export default function Cart({ userP: user }) {
             </form>
         </div>
     ) : Array.isArray(cart) ? (
-        <div className="w-100 flex justify-center">
+        <div className="lottie-container">
             <div className="text-center">
-                <img src="https://www.pngrepo.com/png/8120/180/shopping-cart.png" alt="cart" />
                 <h2>No Item in Your Cart</h2>
-                <button className="btn btn-secondary">Order Now</button>
+                <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_sxhmqgbs.json" background="transparent" speed="1" loop autoplay />
             </div>
         </div>
     ) : (
-        <div className="w-100 flex justify-center">
+        <div className="lottie-container">
             <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_YMim6w.json" background="transparent" speed="1" loop autoplay />
         </div>
     )
 }
 
-function CartItem({ item, setCart }) {
-    const handleDelete = (e) => {
-        console.log(item.id)
-        // api.delete('/transaction/', {
-        //     params: {
-        //         id: item.id,
-        //         orderitemId: item.orderitemId,
-        //     },
-        // })
-        //     .then((res) => console.log(res.data))
-        //     .catch((err) => err)
-        // setCart()
-    }
-
-    // const handleQty = () => {
-    //     console.log(item.orderitemId)
-    // }
-
+function CartItem({ item, handleDelete }) {
     return (
         <div key={item.id} className="cart-item">
             <div className="cart-img">
@@ -153,7 +150,7 @@ function CartItem({ item, setCart }) {
                         {numberToPrice(item.subtotal)} x{item.qty}
                     </li>
                     <li>
-                        <img id={item.orderitemId} className="delete-button" src={Delete} alt={item.id} onClick={handleDelete} />
+                        <img id={item.orderitemId} className="delete-button" src={Delete} alt={item.id} onClick={() => handleDelete(item.id, item.subtotal, item.qty)} />
                     </li>
                 </ul>
             </div>

@@ -78,11 +78,11 @@
 .cart-detail ul:first-child li:first-child {
     color: #bd0707;
     font-weight: 700;
-    margin-bottom: 13px;
+    margin-bottom: 10px;
 }
 
 .cart-detail ul:last-child li:first-child {
-    margin-bottom: 13px;
+    margin-bottom: 10px;
 }
 
 .cart-detail ul:last-child {

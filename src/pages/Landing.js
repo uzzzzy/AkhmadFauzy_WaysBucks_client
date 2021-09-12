@@ -18,6 +18,7 @@ export default function Landing({ user, setModal }) {
                 limit: 4,
                 offset: 0,
                 order: 'id,desc',
+                status: 'available',
             },
         }
 
@@ -66,7 +67,6 @@ export default function Landing({ user, setModal }) {
                 </div>
                 <div className="map-container">{/* <iframe title="waysbucks-map" className="map" src="https://www.google.com/maps/d/embed?mid=1L0TqjVR1iPiwGEGzgKmeysCl2Rtl6HYf" /> */}</div>
             </section>
-            <footer>footer</footer>
         </>
     )
 }

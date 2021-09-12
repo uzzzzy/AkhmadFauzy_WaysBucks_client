@@ -119,7 +119,20 @@ h5 {
     display: none;
 }
 
+.lottie-container {
+    display: flex;
+    justify-content: center;
+    height: 70vh;
+}
 lottie-player {
-    height: 300px;
-    width: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 500px;
+    width: 500px;
 }
