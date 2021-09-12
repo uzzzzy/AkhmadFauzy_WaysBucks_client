@@ -9,7 +9,7 @@ import IconLogout from '../assets/logout.svg'
 
 import '../styles/components/Navbar.css'
 
-export default function Navbar({ modal, token, user, setToken, setModal }) {
+export default function Navbar({ modal, token, user, setToken, setModal, cartCounter }) {
     const [dropdown, setDropdown] = useState(false)
     let history = useHistory()
 
@@ -84,7 +84,7 @@ export default function Navbar({ modal, token, user, setToken, setModal }) {
                         {user?.status === 'customer' ? (
                             <li>
                                 <div id="cart" className="cart" onClick={() => handleBtn('cart')}>
-                                    <p className="cart-number">#1</p>
+                                    {cartCounter > 0 && <p className="cart-number">{cartCounter}</p>}
                                 </div>
                             </li>
                         ) : null}

@@ -7,6 +7,7 @@ export default function Menu({ item, user, setModal }) {
     let history = useHistory()
 
     const handleCard = (e) => {
+        console.log(item.id)
         history.push('/product/' + item.id)
     }
 

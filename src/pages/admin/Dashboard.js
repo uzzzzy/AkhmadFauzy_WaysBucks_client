@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { numberToPrice } from '../../functions/'
+import { delayTime, numberToPrice } from '../../functions/'
 import { api } from '../../config/api'
 
 import '../../styles/pages/admin/Dashboard.css'
 
 const limit = 4
+const delay = delayTime
 
 export default function Dashboard() {
     const [list, setList] = useState()
@@ -14,7 +15,7 @@ export default function Dashboard() {
 
     const [count, setCount] = useState()
     const [page, setPage] = useState(0)
-    const [tab, setTab] = useState()
+    const [tab, setTab] = useState('transaction')
 
     const [item, setItem] = useState()
 
@@ -28,28 +29,45 @@ export default function Dashboard() {
         }
 
         if (tab && tab === 'product')
-            api.get('/products', query)
-                .then((res) => {
-                    setCount(res.data.data.count)
-                    setList(res.data.data.products)
-                })
-                .catch((err) => err)
+            setTimeout(function () {
+                api.get('/products', query)
+                    .then((res) => {
+                        setCount(res.data.data.count)
+                        setList(res.data.data.products)
+                    })
+                    .catch((err) => err)
+            }, delay * 1000)
 
         if (tab && tab === 'topping')
-            api.get('/toppings', query)
-                .then((res) => {
-                    setCount(res.data.data.count)
-                    setList(res.data.data.toppings)
-                })
-                .catch((err) => err)
+            setTimeout(function () {
+                api.get('/toppings', query)
+                    .then((res) => {
+                        setCount(res.data.data.count)
+                        setList(res.data.data.toppings)
+                    })
+                    .catch((err) => err)
+            }, delay * 1000)
+
+        if (tab && tab === 'transaction')
+            setTimeout(function () {
+                api.get('/toppings', query)
+                    .then((res) => {
+                        setCount(0)
+                        setList([])
+                    })
+                    .catch((err) => err)
+            }, delay * 1000)
         setFetch(false)
     }, [tab, page, item, fetch])
 
     const handleTab = (e) => {
-        setPage(0)
-        setItem()
-        setCount(0)
-        setTab(e.target.id)
+        if (e.target.id !== tab) {
+            setPage(0)
+            setItem()
+            setCount(0)
+            setTab(e.target.id)
+            setList()
+        }
     }
 
     const nextBtn = () => {
@@ -63,7 +81,7 @@ export default function Dashboard() {
         <div>
             <div className="row">
                 <div className="tab">
-                    <button className="tablinks" onClick={handleTab}>
+                    <button id="transaction" className="tablinks" onClick={handleTab}>
                         Transaction
                     </button>
                     <button id="product" className="tablinks" onClick={handleTab}>
@@ -75,7 +93,7 @@ export default function Dashboard() {
                 </div>
                 {item ? <Preview item={tab} id={item} fetch={fetch} setFetch={setFetch} /> : null}
                 <div className="app-inner-bar col">
-                    {tab === 'product' || tab === 'topping' ? (
+                    {(tab === 'product' || tab === 'topping') && list?.length > 0 ? (
                         <div className="tabcontent">
                             <ul>
                                 {list?.map((item) => (
@@ -83,8 +101,12 @@ export default function Dashboard() {
                                 ))}
                             </ul>
                         </div>
+                    ) : list?.length === 0 ? (
+                        'noItem'
                     ) : (
-                        <div className="tabcontent">{'No Transaction'}</div>
+                        <div className="w-100 flex justify-center">
+                            <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_YMim6w.json" background="transparent" speed="1" loop autoplay />
+                        </div>
                     )}
                 </div>
             </div>

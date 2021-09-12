@@ -1,0 +1,163 @@
+.cart-container h2 {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 33px;
+    color: #bd0707;
+    margin-bottom: 26px;
+}
+
+.cart-list {
+    width: 661px;
+    max-height: 80vh;
+    padding: 10px 0;
+}
+
+.cart-list p {
+    text-align: center;
+}
+
+.cart-list h4 {
+    font-weight: 400;
+}
+
+.cart-form {
+    padding: 13px 0;
+    padding-left: 82px;
+}
+
+.cart-form * {
+    width: 100%;
+    resize: none;
+}
+
+.cart-order {
+    display: inline-grid;
+    width: 100%;
+    padding: 15px 0;
+    max-height: 50vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.cart-item {
+    display: flex;
+    width: 100%;
+    height: 80px;
+}
+
+.cart-img img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.cart-item:first-child {
+    margin-bottom: 15px;
+}
+.cart-item:not(:first-child):not(:last-child) {
+    margin: 15px 0;
+}
+.cart-item:last-child {
+    margin-top: 15px;
+}
+
+.cart-detail {
+    color: #bd0707;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.cart-detail ul:first-child {
+    width: 100%;
+}
+
+.cart-detail ul:first-child li:first-child {
+    color: #bd0707;
+    font-weight: 700;
+    margin-bottom: 13px;
+}
+
+.cart-detail ul:last-child li:first-child {
+    margin-bottom: 13px;
+}
+
+.cart-detail ul:last-child {
+    text-align: right;
+    padding-right: 20px;
+}
+
+.cart-detail img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.price {
+    font-weight: 300 !important;
+}
+
+.delete-button {
+    height: 25px !important;
+    cursor: pointer;
+    border-radius: 0 !important;
+    background-repeat: no-repeat;
+    object-fit: unset !important;
+    border: none;
+}
+
+.attachment-section {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.attachment-group {
+    display: grid;
+    justify-content: center;
+    width: 216px;
+    height: 122px;
+    cursor: pointer;
+    background: rgba(224, 200, 200, 0.25);
+    border: 2px solid #bd0707;
+    box-sizing: border-box;
+    border-radius: 5px;
+    justify-self: flex-end;
+    color: rgba(104, 50, 50, 0.5);
+}
+
+.attachment-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Tooltip text */
+.tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #f7dada;
+    color: #bd0707;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}

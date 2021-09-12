@@ -26,7 +26,7 @@ export default function Landing({ user, setModal }) {
             .catch((err) => err)
     }, [])
     return (
-        <div>
+        <>
             <section className="intro">
                 <div
                     style={{
@@ -60,6 +60,15 @@ export default function Landing({ user, setModal }) {
                     ))}
                 </div>
             </section>
-        </div>
+            <section>
+                <div>
+                    <h1>Outlet</h1>
+                </div>
+                <div className="map-container">
+                    <iframe title="waysbucks-map" className="map" src="https://www.google.com/maps/d/embed?mid=1L0TqjVR1iPiwGEGzgKmeysCl2Rtl6HYf" />
+                </div>
+            </section>
+            <footer>footer</footer>
+        </>
     )
 }

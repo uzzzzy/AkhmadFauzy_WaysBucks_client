@@ -7,7 +7,7 @@ import attachment from '../../assets/img-attachment.svg'
 import '../../styles/pages/admin/AddUpdateItem.css'
 
 export default function AddOrUpdateItem({ setModal }) {
-    const [preview, setPreview] = useState()
+    const [preview, setPreview] = useState('http://localhost:5000/uploads/placeholder.png')
     const [form, setForm] = useState({
         title: '',
         image: '',
@@ -35,7 +35,7 @@ export default function AddOrUpdateItem({ setModal }) {
                 image: '',
                 price: 0,
             })
-            setPreview('http://www.boc.web.id/wp-content/plugins/photonic/include/images/placeholder.png')
+            setPreview('http://localhost:5000/uploads/placeholder.png')
         }
     }, [mod, item, id])
 
