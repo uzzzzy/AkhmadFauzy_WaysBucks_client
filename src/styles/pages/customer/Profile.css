@@ -66,10 +66,21 @@
     margin-bottom: 10px;
 }
 
-.transaction-card .status p {
-    color: #00d1ff;
-    background-color: rgba(0, 209, 255, 0.1);
+.transaction-card .status button {
     border-radius: 2px;
+    padding: 3px;
+    margin-bottom: 12px;
+    font-size: 10px;
+    width: 100%;
+    background: none;
+    border: none;
+    color: #fff;
+    background-color: #16b5ea;
+    border-radius: 5px;
+}
+
+.transaction-card .status p {
+    border-radius: 20px;
     padding: 3px;
     margin-bottom: 12px;
     font-size: 10px;

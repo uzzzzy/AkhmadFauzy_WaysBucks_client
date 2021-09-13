@@ -12,10 +12,12 @@ const delay = delayTime
 export default function Dashboard({ setModal }) {
     const [list, setList] = useState()
     const [fetch, setFetch] = useState()
-    const [status, setStatus] = useState()
+    const [status, setStatus] = useState('')
     const [count, setCount] = useState()
     const [page, setPage] = useState(0)
     const [tab, setTab] = useState('transaction')
+
+    const statusMessage = status === 'otw' ? 'on the Way' : status === 'approve' ? 'approved' : status === 'cancel' ? 'canceled' : status
 
     const [item, setItem] = useState()
 
@@ -55,14 +57,13 @@ export default function Dashboard({ setModal }) {
             setTimeout(function () {
                 api.get('/transactions', query)
                     .then((res) => {
-                        setCount(0)
+                        setCount(res.data.data.count)
                         setList(res.data.data.transactions)
                     })
                     .catch((err) => err)
             }, delay * 1000)
         }
-
-        setFetch(false)
+        if (fetch) setFetch(false)
     }, [tab, page, item, fetch, status])
 
     const handleTab = (e) => {
@@ -72,26 +73,26 @@ export default function Dashboard({ setModal }) {
             setCount(0)
             setTab(e.target.id)
             setList()
-            setStatus()
+            setStatus('')
         }
     }
 
     const handleFilter = (e) => {
-        if (item !== e.target.id) {
+        if (status !== e.target.id) {
             setList()
             setPage(0)
             setStatus(e.target.id)
-            if (item) setItem()
         }
     }
 
     const nextBtn = () => {
-        if (page < Math.floor(count / limit) || tab === 'transaction') {
+        if (count !== limit && page < Math.floor(count / limit)) {
             setPage(page + 1)
             setFetch(true)
             setList()
         }
     }
+
     const prevBtn = () => {
         if (page !== 0) {
             setPage(page - 1)
@@ -104,13 +105,13 @@ export default function Dashboard({ setModal }) {
         <div>
             <div className="row">
                 <div className="tab">
-                    <button id="transaction" className="tablinks" onClick={handleTab}>
+                    <button id="transaction" name="tab" className="tablinks" onClick={handleTab}>
                         Transaction
                     </button>
-                    <button id="product" className="tablinks" onClick={handleTab}>
+                    <button id="product" name="tab" className="tablinks" onClick={handleTab}>
                         Products
                     </button>
-                    <button id="topping" className="tablinks" onClick={handleTab}>
+                    <button id="topping" name="tab" className="tablinks" onClick={handleTab}>
                         Toppings
                     </button>
                 </div>
@@ -122,6 +123,12 @@ export default function Dashboard({ setModal }) {
                             <p>{page + 1}</p>
                             <p onClick={nextBtn}>&raquo;</p>
                         </div>
+
+                        {list && (
+                            <h2 className="capitalize">
+                                {count} {statusMessage} {tab} found
+                            </h2>
+                        )}
                         <div className="tab-filter">
                             {tab === 'transaction' ? (
                                 <div className="dropdown">
@@ -146,6 +153,7 @@ export default function Dashboard({ setModal }) {
                                 <div className="dropdown">
                                     <span>Status</span>
                                     <div className="dropdown-content">
+                                        <button onClick={handleFilter}>All</button>
                                         <button id="available" onClick={handleFilter}>
                                             Available
                                         </button>
@@ -167,9 +175,7 @@ export default function Dashboard({ setModal }) {
                                 </ul>
                             </div>
                         </>
-                    ) : list?.length === 0 ? (
-                        'noItem'
-                    ) : (
+                    ) : list?.length === 0 ? null : (
                         <div className="lottie-container">
                             <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_YMim6w.json" background="transparent" speed="1" loop autoplay />
                         </div>
@@ -181,6 +187,9 @@ export default function Dashboard({ setModal }) {
 }
 
 function Item({ tab, item, setItem, setModal }) {
+    const status = item.status
+    const statusMessage = status === 'otw' ? 'on the Way' : status === 'approve' ? 'approved' : status === 'cancel' ? 'canceled' : status === 'receive' ? 'Received' : status
+
     const handleItem = () => {
         setModal({
             modal: true,
@@ -193,7 +202,12 @@ function Item({ tab, item, setItem, setModal }) {
             <img src={item.attachment} alt="img" width="50px" />
             <span>
                 <h3>{numberToPrice(item.total)}</h3>
-                <h5>{item.status}</h5>
+                <div className="flex">
+                    <h4 className={`capitalize ${status}`}>{statusMessage}</h4>
+                    <h5 className="text-left">
+                        To: {item.address}, Pos Code: {item.poscode}, Phone: {item.phone}
+                    </h5>
+                </div>
             </span>
             <div className="action transaction">
                 <button onClick={handleItem} id={item.id}>

@@ -7,7 +7,7 @@ import { numberToPrice } from '../functions'
 import '../styles/components/Modal.css'
 
 export default function Modal({ modal, setModal, setToken }) {
-    const { modalOpt, modalMessage, modalTransaction } = modal
+    const { user, modalOpt, modalMessage, modalTransaction } = modal
     const [form, setForm] = useState({
         email: '',
         password: '',
@@ -97,7 +97,7 @@ export default function Modal({ modal, setModal, setToken }) {
     } else if (modalOpt === 'transaction') {
         return (
             <div id="modal" className={`modal ${modalOpt}`} onClick={closeModal}>
-                <Transaction modalTransaction={modalTransaction} setModal={setModal} />
+                <Transaction modalTransaction={modalTransaction} setModal={setModal} user={user} />
             </div>
         )
     } else {
@@ -113,18 +113,19 @@ export default function Modal({ modal, setModal, setToken }) {
     }
 }
 
-function Transaction({ modalTransaction, setModal }) {
+function Transaction({ user, modalTransaction, setModal }) {
     const [transaction, setTransaction] = useState({})
     const [view, setView] = useState(false)
     const [total, setTotal] = useState(0)
     const [tab, setTab] = useState('detail')
-    let status = transaction.status === 'waiting' ? 'Waiting Approve' : transaction.status === 'approve' ? 'Waiting Order to be Made' : transaction.status === 'otw' ? 'On The Way' : transaction.status === 'received' ? 'Order Received' : 'Order Canceled'
+    let status = transaction.status === 'waiting' ? 'Waiting Approve' : transaction.status === 'approve' ? 'Waiting Order to be Made' : transaction.status === 'otw' ? 'On The Way' : transaction.status === 'receive' ? 'Order Received' : 'Order Canceled'
 
     const handleBtn = (e) => {
         switch (e.target.id) {
             case 'cancel':
             case 'approve':
             case 'otw':
+            case 'receive':
                 api.patch('/transaction/' + transaction.id, {
                     status: e.target.id,
                 })
@@ -176,6 +177,12 @@ function Transaction({ modalTransaction, setModal }) {
                                 Cancel
                             </button>
                         </div>
+                    ) : user ? (
+                        <div className={view ? 'row hidden' : 'row'}>
+                            <button id="receive" className="col btn-receive" onClick={handleBtn}>
+                                Recieve Order
+                            </button>
+                        </div>
                     ) : (
                         transaction.status === 'approve' && (
                             <div className={view ? 'row hidden' : 'row'}>
@@ -188,15 +195,17 @@ function Transaction({ modalTransaction, setModal }) {
                     <div className={view ? 'transaction-detail hidden' : 'transaction-detail'}>
                         <h2 className={transaction.status}>{status}</h2>
                         <h2 className="total">{numberToPrice(total)}</h2>
-                        <div className="row">
-                            <ul className="w-25">
-                                <li>Order By</li>
-                            </ul>
-                            <ul className="col">
-                                <li>{transaction.user?.fullName}</li>
-                                <li>{transaction.user?.email}</li>
-                            </ul>
-                        </div>
+                        {!user && (
+                            <div className="row">
+                                <ul className="w-25">
+                                    <li>Order By</li>
+                                </ul>
+                                <ul className="col">
+                                    <li>{transaction.user?.fullName}</li>
+                                    <li>{transaction.user?.email}</li>
+                                </ul>
+                            </div>
+                        )}
                         <div className="row">
                             <ul className="w-25">
                                 <li>Recipient</li>

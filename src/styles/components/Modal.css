@@ -113,16 +113,6 @@
     padding: 2px;
 }
 
-.otw {
-    color: #00d1ff;
-    background-color: rgba(0, 209, 255, 0.1);
-}
-
-.approve {
-    color: #00d1ff;
-    background-color: rgba(0, 209, 255, 0.1);
-}
-
 .modal.transaction .transaction-container {
     display: inline-grid;
     width: 444px;
@@ -155,7 +145,7 @@
     background-color: #bd0707;
 }
 
-.transaction-container button {
+.transaction-container > .row.tabcontent > button {
     font-size: 20pt;
     padding: 10px;
     background: none;
@@ -208,6 +198,14 @@
 
 .modal-content p {
     margin-top: 20px;
+}
+
+.btn-receive {
+    background-color: green;
+    font-size: 20pt;
+    padding: 10px;
+    border: none;
+    color: white;
 }
 
 .success {

@@ -8,7 +8,7 @@ import QR from '../../assets/qrcode.svg'
 
 import '../../styles/pages/customer/Profile.css'
 
-export default function Profile({ user }) {
+export default function Profile({ user, setModal }) {
     const [transactions, setTransactions] = useState()
     useEffect(() => {
         if (!transactions) {
@@ -21,8 +21,8 @@ export default function Profile({ user }) {
                 .then((res) => setTransactions(res.data.data.transactions))
                 .catch((err) => err)
         }
-        console.log(transactions)
     }, [transactions])
+
     return (
         <div className="row">
             <div className="col user-detail">
@@ -71,8 +71,23 @@ export default function Profile({ user }) {
                                 <div className="status">
                                     <img className="logo" src={Logo} alt="logo" />
                                     <img className="qr" src={QR} alt="barcode" />
-                                    <p>{trans?.status?.toUpperCase()}</p>
-                                    <h5>Sub Total: {numberToPrice(trans?.total)}</h5>
+                                    {trans.status === 'otw' ? (
+                                        <button
+                                            className={'btn ' + trans.status}
+                                            onClick={() =>
+                                                setModal({
+                                                    modal: true,
+                                                    modalOpt: 'transaction',
+                                                    modalTransaction: trans.id,
+                                                    user: true,
+                                                })
+                                            }>
+                                            On The Way
+                                        </button>
+                                    ) : (
+                                        <p className={trans.status}>{trans.status === 'waiting' ? 'Waiting Approve' : trans.status === 'approve' ? 'Waiting Order to be Made' : trans.status === 'otw' ? 'On The Way' : trans.status === 'receive' ? 'Order Received' : 'Order Canceled'}</p>
+                                    )}
+                                    <h5>{numberToPrice(trans?.total)}</h5>
                                 </div>
                             </div>
                         </div>

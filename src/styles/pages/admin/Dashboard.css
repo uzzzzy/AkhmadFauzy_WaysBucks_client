@@ -72,8 +72,21 @@
     box-shadow: 0 14px 26px -12px rgba(221, 27, 37, 0.39), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(176, 39, 39, 0.2);
 }
 
+.tabcontent .item h4 {
+    width: 130px;
+    text-align: center;
+    padding: 2px;
+    border-radius: 50px;
+}
+
+.tabcontent .item h5 {
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
 .tabcontent .item:hover h3,
 .tabcontent .item:hover h5 {
+    background-color: #bd0707;
     color: white;
 }
 
