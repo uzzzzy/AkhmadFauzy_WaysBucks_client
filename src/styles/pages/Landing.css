@@ -104,3 +104,25 @@
     margin: -4px;
     margin-top: -50px;
 }
+
+.outlet {
+    margin-top: 50px;
+}
+
+.outlet-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 50px;
+    padding: 10px;
+    display: grid;
+    justify-content: center;
+}
+
+.outlet-grid ul {
+    width: 300px;
+}
+
+.outlet-grid li:first-child {
+    margin-bottom: 10px;
+    font-weight: 700;
+}

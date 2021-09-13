@@ -62,9 +62,37 @@ export default function Landing({ user, setModal }) {
                     ))}
                 </div>
             </section>
-            <section>
-                <div>
-                    <h1>Outlet</h1>
+            <section className="outlet">
+                <h1 className="text-center bold">OUTLET</h1>
+
+                <div className="outlet-grid">
+                    <div className="text-center">
+                        <ul>
+                            <li>Outlet Waysbucks 1</li>
+                            <li>South Jakarta, RT.5/RW.2, Kuningan, East Kuningan, Setiabudi, South Jakarta City, Jakarta 12940</li>
+                        </ul>
+                    </div>
+
+                    <div className="text-center">
+                        <ul>
+                            <li>Outlet Waysbucks 2</li>
+                            <li>Jl. Jend. Sudirman, RT.5/RW.3, Senayan, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 10270</li>
+                        </ul>
+                    </div>
+
+                    <div className="text-center">
+                        <ul>
+                            <li>Outlet Waysbucks 3</li>
+                            <li>Central Jakarta, RT.11/RW.2, Gambir, Central Jakarta City, Jakarta 10110</li>
+                        </ul>
+                    </div>
+
+                    <div className="text-center">
+                        <ul>
+                            <li>Outlet Waysbucks 4</li>
+                            <li>RT.3/RW.5, Pegangsaan, Menteng, Central Jakarta City, Jakarta</li>
+                        </ul>
+                    </div>
                 </div>
                 <div className="map-container">
                     <iframe title="my-map" loading="lazy" className="map" src="https://www.google.com/maps/d/embed?mid=1L0TqjVR1iPiwGEGzgKmeysCl2Rtl6HYf" />

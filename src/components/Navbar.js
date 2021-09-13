@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import Logo from '../assets/logo.svg'
+import IconChat from '../assets/chat.svg'
 import IconUser from '../assets/user-icon.svg'
 import IconProduct from '../assets/add-product.svg'
 import IconTopping from '../assets/add-topping.svg'
@@ -33,6 +34,9 @@ export default function Navbar({ modal, token, user, setToken, setModal, cartCou
                     modal: true,
                     modalOpt: 'register',
                 })
+                break
+            case 'message':
+                history.push('/message')
                 break
             case 'logo':
                 history.push('/')
@@ -94,6 +98,10 @@ export default function Navbar({ modal, token, user, setToken, setModal, cartCou
                             {dropdown ? (
                                 <div id="dropdown" className="dropdown">
                                     <ul>
+                                        <li onClick={() => handleBtn('message')}>
+                                            <img src={IconChat} className="dropdown-icon" alt="Add Product" />
+                                            <span>Message</span>
+                                        </li>
                                         {user?.status === 'admin' ? (
                                             <>
                                                 <li onClick={() => handleBtn('product')}>

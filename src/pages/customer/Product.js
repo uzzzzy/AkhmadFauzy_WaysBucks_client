@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import { api } from '../../config/api'
 import { numberToPrice } from '../../functions'
@@ -70,6 +70,12 @@ export default function Product({ setModal }) {
 
     return (
         <>
+            <div className="menu">
+                <div className="menu-header">
+                    <h2></h2>
+                    <Link to="/menu">Go to Menu &raquo;</Link>
+                </div>
+            </div>
             <div className="product-grid w-100">
                 <div className="col">
                     <img className="product-img" src={coffee?.image} alt="product-img" />
