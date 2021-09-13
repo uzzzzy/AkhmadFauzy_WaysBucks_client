@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
-import { delayTime, numberToPrice } from '../../functions/'
+import Preview from '../../components/Dashboard/Preview'
+import Item from '../../components/Dashboard/Item'
+
+import { delayTime } from '../../functions/'
 import { api } from '../../config/api'
 
 import '../../styles/pages/admin/Dashboard.css'
@@ -16,20 +19,25 @@ export default function Dashboard({ data, setData, setModal }) {
     const [count, setCount] = useState()
     const [page, setPage] = useState(0)
     const [tab, setTab] = useState('transaction')
-
+    let history = useHistory()
     const statusMessage = status === 'otw' ? 'on the Way' : status === 'approve' ? 'approved' : status === 'cancel' ? 'canceled' : status
 
     const [item, setItem] = useState()
 
     useEffect(() => {
-        const order = tab === 'transaction' ? 'createdAt,desc' : undefined
+        let search = window.location.search
+        let par = new URLSearchParams(search)
+        let foo = par.get('tab')
+
+        if (foo) {
+            setTab(foo)
+        }
 
         const query = {
             params: {
                 limit,
                 offset: limit * page,
                 status,
-                order,
             },
         }
 
@@ -45,6 +53,7 @@ export default function Dashboard({ data, setData, setModal }) {
                     .then((res) => {
                         setCount(res.data.data.count)
                         setList(res.data.data.products)
+                        if (fetch) setFetch()
                     })
                     .catch((err) => err)
             }, delay * 1000)
@@ -55,6 +64,7 @@ export default function Dashboard({ data, setData, setModal }) {
                     .then((res) => {
                         setCount(res.data.data.count)
                         setList(res.data.data.toppings)
+                        if (fetch) setFetch()
                     })
                     .catch((err) => err)
             }, delay * 1000)
@@ -65,6 +75,7 @@ export default function Dashboard({ data, setData, setModal }) {
                     .then((res) => {
                         setCount(res.data.data.count)
                         setList(res.data.data.transactions)
+                        if (fetch) setFetch()
                     })
                     .catch((err) => err)
             }, delay * 1000)
@@ -73,38 +84,39 @@ export default function Dashboard({ data, setData, setModal }) {
 
     const handleTab = (e) => {
         if (e.target.id !== tab) {
-            setFetch(true)
+            setList()
+            history.push(`/`)
             setPage(0)
             setTab(e.target.id)
-            setList()
             setItem()
             setCount(0)
             setStatus('')
+            setFetch(true)
         }
     }
 
     const handleFilter = (e) => {
         if (status !== e.target.id) {
+            setList()
             setFetch(true)
             setPage(0)
-            setList()
             setStatus(e.target.id)
         }
     }
 
     const nextBtn = () => {
         if (count !== limit && page < Math.floor(count / limit)) {
+            setList()
             setFetch(true)
             setPage(page + 1)
-            setList()
         }
     }
 
     const prevBtn = () => {
         if (page !== 0) {
+            setList()
             setFetch(true)
             setPage(page - 1)
-            setList()
         }
     }
 
@@ -131,15 +143,15 @@ export default function Dashboard({ data, setData, setModal }) {
                             <p onClick={nextBtn}>&raquo;</p>
                         </div>
 
-                        {list && (
+                        {!fetch && list && (
                             <h2 className="capitalize">
                                 {count} {statusMessage} {tab} found
                             </h2>
                         )}
                         <div className="tab-filter">
-                            {tab === 'transaction' ? (
+                            {!fetch && tab === 'transaction' ? (
                                 <div className="dropdown">
-                                    <span>Status</span>
+                                    <span className="capitalize">{statusMessage ? statusMessage : 'No Filter'} </span>
                                     <div className="dropdown-content">
                                         <button onClick={handleFilter}>All</button>
                                         <button id="waiting" onClick={handleFilter}>
@@ -160,22 +172,24 @@ export default function Dashboard({ data, setData, setModal }) {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="dropdown">
-                                    <span>Status</span>
-                                    <div className="dropdown-content">
-                                        <button onClick={handleFilter}>All</button>
-                                        <button id="available" onClick={handleFilter}>
-                                            Available
-                                        </button>
-                                        <button id="disabled" onClick={handleFilter}>
-                                            Disabled
-                                        </button>
+                                !fetch && (
+                                    <div className="dropdown">
+                                        <span>Status</span>
+                                        <div className="dropdown-content">
+                                            <button onClick={handleFilter}>All</button>
+                                            <button id="available" onClick={handleFilter}>
+                                                Available
+                                            </button>
+                                            <button id="disabled" onClick={handleFilter}>
+                                                Disabled
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                )
                             )}
                         </div>
                     </div>
-                    {list?.length > 0 ? (
+                    {!fetch && list?.length > 0 ? (
                         <>
                             <div className="tabcontent">
                                 <ul>
@@ -194,98 +208,4 @@ export default function Dashboard({ data, setData, setModal }) {
             </div>
         </div>
     )
-}
-
-function Item({ tab, item, setItem, setModal }) {
-    const status = item.status
-    const statusMessage = status === 'otw' ? 'on the Way' : status === 'approve' ? 'approved' : status === 'cancel' ? 'canceled' : status === 'receive' ? 'Received' : status
-
-    const handleItem = () => {
-        setModal({
-            modal: true,
-            modalOpt: 'transaction',
-            modalTransaction: item.id,
-        })
-    }
-    return tab === 'transaction' ? (
-        <li className="item">
-            <img src={item.attachment} alt="img" width="50px" />
-            <span>
-                <h3>{numberToPrice(item.total)}</h3>
-                <div className="flex">
-                    <h4 className={`capitalize ${status}`}>{statusMessage}</h4>
-                    <h5 className="text-left">
-                        To: {item.address}, Pos Code: {item.poscode}, Phone: {item.phone}
-                    </h5>
-                </div>
-            </span>
-            <div className="action transaction">
-                <button onClick={handleItem} id={item.id}>
-                    View
-                </button>
-            </div>
-        </li>
-    ) : (
-        <li className={'item ' + item.status}>
-            <img src={item.image} alt="img" width="50px" />
-            <span>
-                <h3>{item.title}</h3>
-                <h5>{numberToPrice(item.price)}</h5>
-            </span>
-            <div className="action">
-                <Link to={`/update-${tab}/${item.id}`}>
-                    <button>Update</button>
-                </Link>
-                <button id={item.id} onClick={() => setItem(item.id)}>
-                    View
-                </button>
-            </div>
-        </li>
-    )
-}
-
-function Preview({ item, id, fetch, setFetch }) {
-    const setItemStatus = (e) => {
-        if (e.target.id === 'delete')
-            api.delete(`/${item}/` + id)
-                .then((res) => res)
-                .catch((err) => err)
-
-        if (e.target.id === 'available')
-            api.patch(`/${item}/` + id, {
-                status: 'available',
-            })
-                .then((res) => res)
-                .catch((err) => err)
-
-        setFetch(true)
-    }
-
-    const [preview, setPreview] = useState()
-    useEffect(() => {
-        api.get(`/${item}/${id}`).then((res) => setPreview(res.data.data[item]))
-    }, [item, id, fetch])
-
-    if (item === 'product' || item === 'topping')
-        return (
-            <div className="col preview">
-                {preview && (
-                    <div className={item + ' w-100'}>
-                        <h1>{preview.title}</h1>
-                        <img src={preview.image} alt="preview-img" />
-                        <h2>{numberToPrice(preview.price)}</h2>
-                        <h2>{preview.status}</h2>
-
-                        <button id="delete" className="btn btn-primary" onClick={setItemStatus}>
-                            Disable
-                        </button>
-
-                        <button id="available" className="btn btn-primary" onClick={setItemStatus}>
-                            Available
-                        </button>
-                    </div>
-                )}
-            </div>
-        )
-    else return <div className="col">Transaction</div>
 }

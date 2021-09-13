@@ -66,8 +66,8 @@ export default function AddOrUpdateItem({ setModal }) {
                 },
             })
                 .then((res) => {
-                    setModal({ modal: true, modalOpt: 'success', modalMessage: item + ' berhasil di tambahkan' })
-                    history.push('/')
+                    setModal({ modal: true, modalOpt: 'success', modalMessage: item + ' has been added' })
+                    history.push(`/?tab=${item}`)
                 })
                 .catch((error) => {
                     setModal({ modal: true, modalOpt: 'success', modalMessage: error.response.data.message })
@@ -79,8 +79,8 @@ export default function AddOrUpdateItem({ setModal }) {
                 },
             })
                 .then((res) => {
-                    setModal({ modal: true, modalOpt: 'success', modalMessage: item + ' berhasil di update' })
-                    history.push('/')
+                    setModal({ modal: true, modalOpt: 'success', modalMessage: item + ' has been added' })
+                    history.push(`/?tab=${item}`)
                 })
                 .catch((error) => {
                     if (error.response) {

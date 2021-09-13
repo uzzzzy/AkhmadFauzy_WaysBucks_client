@@ -100,4 +100,14 @@
 
 .transaction-card .col li {
     text-align: start;
+    max-width: 201px;
+    height: 100px;
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.profile-cart-detail li {
+    margin-left: 2px;
+    margin-top: 10px;
+    height: 20px !important;
 }

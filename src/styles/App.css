@@ -111,6 +111,10 @@ h5 {
 }
 
 /* utilities */
+.pointer {
+    cursor: pointer;
+}
+
 .mr-1 {
     margin-right: 0.25rem !important;
 }
