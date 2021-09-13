@@ -1,9 +1,28 @@
+import { useEffect, useState } from 'react'
+
+import { api } from '../../config/api'
+import { numberToPrice } from '../../functions'
+
 import Logo from '../../assets/logo.svg'
 import QR from '../../assets/qrcode.svg'
 
 import '../../styles/pages/customer/Profile.css'
 
-export default function Profile({ user }) {
+export default function Profile({ userP: user }) {
+    const [transactions, setTransactions] = useState()
+    useEffect(() => {
+        if (!transactions) {
+            api.get('/transactions', {
+                params: {
+                    order: 'id,desc',
+                    attributes: 'id,status',
+                },
+            })
+                .then((res) => setTransactions(res.data.data.transactions))
+                .catch((err) => err)
+        }
+        console.log(transactions)
+    }, [transactions])
     return (
         <div className="row">
             <div className="col user-detail">
@@ -21,29 +40,20 @@ export default function Profile({ user }) {
             </div>
             <div className="col transactions">
                 <h2>My Transactions</h2>
-                <div className="hidden">
-                    <div>
-                        <div className="row transaction-card">
-                            <div className="col">Item List</div>
-                            <div className="status">
-                                <img className="logo" src={Logo} alt="logo" />
-                                <img className="qr" src={QR} alt="barcode" />
-                                <p>On The Way</p>
-                                <h5>Sub Total: 69.000</h5>
+                <div>
+                    {transactions?.map((item) => (
+                        <div key={item?.id}>
+                            <div className="row transaction-card">
+                                <div className="col">Item List</div>
+                                <div className="status">
+                                    <img className="logo" src={Logo} alt="logo" />
+                                    <img className="qr" src={QR} alt="barcode" />
+                                    <p>{item?.status?.toUpperCase()}</p>
+                                    <h5>Sub Total: {numberToPrice(item?.total)}</h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <div className="row transaction-card">
-                            <div className="col">Item List</div>
-                            <div className="status">
-                                <img className="logo" src={Logo} alt="logo" />
-                                <img className="qr" src={QR} alt="barcode" />
-                                <p>On The Way</p>
-                                <h5>Sub Total: 69.000</h5>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>

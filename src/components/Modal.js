@@ -1,15 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { api } from '../config/api'
+import { numberToPrice } from '../functions'
 
 import '../styles/components/Modal.css'
 
-export default function Modal({ modalOpt, modalMessage, setModal, setToken }) {
+export default function Modal({ modal, setModal, setToken }) {
+    const { modalOpt, modalMessage, modalTransaction } = modal
     const [form, setForm] = useState({
         email: '',
         password: '',
     })
+    const [transaction, setTransaction] = useState({})
+    const [total, setTotal] = useState(0)
     const [error, setError] = useState()
     let history = useHistory()
 
@@ -20,6 +24,17 @@ export default function Modal({ modalOpt, modalMessage, setModal, setToken }) {
             history.push('/cart')
         }
     }
+
+    useEffect(() => {
+        if (modalTransaction)
+            api.get('/transaction/' + modalTransaction)
+                .then((res) => {
+                    const data = res.data.data.transaction
+                    setTransaction(data)
+                    setTotal(res.data.data.total)
+                })
+                .catch((err) => console.log(err.response.data))
+    }, [modalTransaction])
 
     if (modalOpt === 'login' || modalOpt === 'register') {
         const handleOnChange = (e) => {
@@ -90,6 +105,63 @@ export default function Modal({ modalOpt, modalMessage, setModal, setToken }) {
         return (
             <div id="modal" className={`modal ${modalOpt}`} onClick={closeModal}>
                 <div className="modal-content">{modalMessage}</div>
+            </div>
+        )
+    } else if (modalOpt === 'transaction') {
+        let status = transaction.status === 'waiting' ? 'Waiting Approve' : transaction.status === 'approve' ? 'Approved' : transaction.status === 'otw' ? 'On The Way' : transaction.status === 'received' ? 'Order Received' : 'Canceled'
+
+        const handleBtn = (e) => {
+            console.log(e.target.id, transaction.id)
+        }
+
+        return (
+            <div id="modal" className={`modal ${modalOpt}`} onClick={closeModal}>
+                <div className="transaction-container">
+                    <img src={transaction.attachment} alt="transaction" />
+                    {transaction.status === 'waiting' ? (
+                        <div className="row">
+                            <button id="approve" className="col approve" onClick={handleBtn}>
+                                Approve
+                            </button>
+                            <button id="cancel" className="col cancel" onClick={handleBtn}>
+                                Cancel
+                            </button>
+                        </div>
+                    ) : (
+                        transaction.status === 'approve' && (
+                            <div className="row">
+                                <button id="send" className="col send" onClick={handleBtn}>
+                                    Send Order
+                                </button>
+                            </div>
+                        )
+                    )}
+                    <div className="transaction-detail">
+                        <h2 className={transaction.status}>{status}</h2>
+                        <h2 className="total">{numberToPrice(total)}</h2>
+                        <div className="row">
+                            <ul className="w-25">
+                                <li>Order By</li>
+                            </ul>
+                            <ul className="col">
+                                <li>{transaction.user?.fullName}</li>
+                                <li>{transaction.user?.email}</li>
+                            </ul>
+                        </div>
+                        <div className="row">
+                            <ul className="w-25">
+                                <li>Recipient</li>
+                            </ul>
+                            <ul className="col">
+                                <li>{transaction.fullName}</li>
+                                <li>{transaction.email}</li>
+                                <li>{transaction.phone}</li>
+                                <li>{transaction.poscode}</li>
+                                <li>{transaction.address}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     } else {

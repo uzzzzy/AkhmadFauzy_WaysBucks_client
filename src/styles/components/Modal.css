@@ -26,11 +26,78 @@
     padding: 41px 31px;
 }
 
-.modal-content button {
-    height: 50px;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 25px;
+.modal.transaction {
+    position: absolute;
+    height: 100vh;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.modal.transaction img {
+    width: 50vh;
+}
+
+.modal.transaction h2 {
+    text-align: center;
+    padding: 2px;
+}
+
+.waiting {
+    color: #00d1ff;
+    background-color: rgba(0, 209, 255, 0.1);
+}
+
+.approve {
+    color: #00d1ff;
+    background-color: rgba(0, 209, 255, 0.1);
+}
+
+.modal.transaction .transaction-container {
+    display: inline-grid;
+}
+
+.transaction-container .row {
+    grid-gap: 0;
+}
+
+.transaction-container button {
+    font-size: 20pt;
+    padding: 10px;
+    background: none;
+    border: none;
+}
+
+.transaction-container button.approve {
+    color: #058405;
+    background-color: #b5fcb5;
+}
+
+.transaction-container button.cancel {
+    color: #bd0707;
+    background-color: #fa6b6b;
+}
+
+.transaction-container button.send {
+    color: #a481d3;
+    background-color: #effc76;
+}
+
+.transaction-container button:hover {
+    background-color: #bd0707;
+    color: white;
+}
+
+.modal.transaction .transaction-detail {
+    padding: 10px;
+    background-color: white;
+}
+
+.transaction-detail .row {
+    margin: 10px;
+}
+
+.transaction-detail li {
+    margin: 2px 0;
 }
 
 .modal-content h2 {
@@ -55,6 +122,15 @@
     text-align: center;
     text-transform: capitalize;
     color: #469f74 !important;
+}
+
+.alert {
+    padding: 10px;
+    background-color: #ac1c12;
+    color: #fff6f6;
+    margin-bottom: 15px;
+    width: 100%;
+    border-radius: 10px;
 }
 
 .error {

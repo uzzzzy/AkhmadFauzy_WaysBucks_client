@@ -33,3 +33,7 @@
 .justify-end {
     justify-content: flex-end;
 }
+
+.w-25 {
+    width: 25%;
+}

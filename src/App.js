@@ -11,6 +11,7 @@ import PrivateRoute from './components/PrivateRoute'
 import Landing from './pages/Landing'
 import Product from './pages/customer/Product'
 import Dashboard from './pages/admin/Dashboard'
+import Profile from './pages/customer/Profile'
 import AddOrUpdateItem from './pages/admin/AddOrUpdateItem'
 import Cart from './pages/customer/Cart'
 
@@ -24,7 +25,6 @@ export default function App() {
     const [user, setUser] = useState()
 
     useEffect(() => {
-        // setModal()
         if (token || localStorage.token) {
             if (!token) setToken(localStorage.token)
             setAuthToken(localStorage.token)
@@ -54,11 +54,12 @@ export default function App() {
                 <main>
                     <Switch>
                         <Route exact path="/">
-                            {user?.status === 'admin' ? <Dashboard /> : <Landing token={token} user={user} setModal={setModal} />}
+                            {user?.status === 'admin' ? <Dashboard setModal={setModal} /> : <Landing token={token} user={user} setModal={setModal} />}
                         </Route>
                         <PrivateRoute role="admin" path="/:mod-:item/:id?" user={user} component={AddOrUpdateItem} setModal={setModal} />
                         <PrivateRoute path="/product/:id" user={user} component={Product} setModal={setModal} />
-                        <PrivateRoute path="/cart" user={user} component={Cart} userP={user} setModal={setModal} setCartCounter={setCartCounter} />
+                        <PrivateRoute path="/cart" user={user} component={Cart} setModal={setModal} setCartCounter={setCartCounter} />
+                        <PrivateRoute path="/profile" user={user} component={Profile} />
                         <Route>
                             <div className="lottie-container">
                                 <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_lwuTiS.json" background="transparent" speed="1" loop autoplay />
@@ -67,7 +68,7 @@ export default function App() {
                     </Switch>
                 </main>
             </div>
-            {modal?.modal ? <Modal modalOpt={modal.modalOpt} modalMessage={modal.modalMessage} setModal={setModal} setToken={setToken} /> : null}
+            {modal?.modal ? <Modal modal={modal} setModal={setModal} setToken={setToken} /> : null}
         </Router>
     )
 }

@@ -14,7 +14,7 @@ export default function PrivateRoute({ role: status, user, component: Component,
             render={() => {
                 if (localStorage.token && !user) return 'loading'
                 else if (user?.status === role) {
-                    return <Component {...rest} />
+                    return <Component user={user} {...rest} />
                 } else {
                     return <Redirect to="/" />
                 }

@@ -79,7 +79,8 @@ export default function Cart({ userP: user, setCartCounter, setModal }) {
             },
         })
             .then((res) => {
-                setModal({ modal: true, modalOpt: 'success', modalMessage: item + ' berhasil di tambahkan' })
+                setCartCounter()
+                setModal({ modal: true, modalOpt: 'success', modalMessage: res.data.message })
                 history.push('/profile')
             })
             .catch((error) => {

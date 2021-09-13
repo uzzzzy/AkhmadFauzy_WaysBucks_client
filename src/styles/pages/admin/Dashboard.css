@@ -55,6 +55,16 @@
     display: inline-grid;
 }
 
+.tabcontent .item .action.transaction {
+    position: relative;
+}
+
+.tabcontent .item .action.transaction button {
+    position: absolute;
+    top: 25%;
+    right: 0;
+}
+
 .tabcontent .item:hover {
     background-color: #bd0707;
     border-radius: 10px;

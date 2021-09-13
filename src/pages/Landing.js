@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { api } from '../config/api'
 
@@ -53,7 +54,7 @@ export default function Landing({ user, setModal }) {
             <section className="menu">
                 <div className="menu-header">
                     <h1>Let's Order</h1>
-                    <button>All Menu &raquo;</button>
+                    <Link to="/menu">All Menu &raquo;</Link>
                 </div>
                 <div className="grid">
                     {coffees?.map((item, i) => (

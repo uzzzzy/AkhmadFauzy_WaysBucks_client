@@ -15,8 +15,16 @@ export default function Product({ setModal }) {
 
     useEffect(() => {
         if (!coffee || !toppings) {
-            api.get('/product/' + id).then((res) => setCoffee(res.data.data.product))
-            api.get('/toppings').then((res) => setToppings(res.data.data.toppings))
+            api.get('/product/' + id, {
+                params: {
+                    status: 'available',
+                },
+            }).then((res) => setCoffee(res.data.data.product))
+            api.get('/toppings', {
+                params: {
+                    status: 'available',
+                },
+            }).then((res) => setToppings(res.data.data.toppings))
         }
 
         if (coffee) {
@@ -69,44 +77,50 @@ export default function Product({ setModal }) {
                 <div className="product-detail w-100">
                     <h1>{coffee?.title}</h1>
                     <p className="price">{numberToPrice(coffee?.price)}</p>
-                    <p className="toping">Toping</p>
 
-                    <div className="toping-grid">
-                        {toppings?.map((item, i) => (
-                            <div key={i} className="col-4 checkbox-wrapper">
-                                <div>
-                                    <div>
-                                        <input className="checkbox" type="checkbox" id={'check-' + (i + 1)} onClick={() => handleTopping(item.id, item.price)} />
-                                        <label htmlFor={'check-' + (i + 1)}>
-                                            <img className="img-toping" src={item.image} alt="Toping" />
-                                        </label>
-                                        <label className="checkmark"></label>
+                    {coffee?.status === 'available' ? (
+                        <>
+                            <p className="toping">Toping</p>
+                            <div className="toping-grid">
+                                {toppings?.map((item, i) => (
+                                    <div key={i} className="col-4 checkbox-wrapper">
+                                        <div>
+                                            <div>
+                                                <input className="checkbox" type="checkbox" id={'check-' + (i + 1)} onClick={() => handleTopping(item.id, item.price)} />
+                                                <label htmlFor={'check-' + (i + 1)}>
+                                                    <img className="img-toping" src={item.image} alt="Toping" />
+                                                </label>
+                                                <label className="checkmark"></label>
+                                            </div>
+
+                                            <label htmlFor={'check-' + (i + 1)} className="toping-name">
+                                                {item.title}
+                                            </label>
+                                        </div>
                                     </div>
-
-                                    <label htmlFor={'check-' + (i + 1)} className="toping-name">
-                                        {item.title}
-                                    </label>
+                                ))}
+                            </div>
+                            <div className="topping-quantity">
+                                <div className="quantity">
+                                    <button id="red" onClick={handleQty}>
+                                        -
+                                    </button>
+                                    <p>{cart.qty}</p>
+                                    <button id="add" onClick={handleQty}>
+                                        +
+                                    </button>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                    <div className="topping-quantity">
-                        <div className="quantity">
-                            <button id="red" onClick={handleQty}>
-                                -
-                            </button>
-                            <p>{cart.qty}</p>
-                            <button id="add" onClick={handleQty}>
-                                +
-                            </button>
-                        </div>
-                    </div>
-                    <ul>
-                        <li>Total</li>
-                        <li>{numberToPrice(cart.total * cart.qty)}</li>
-                    </ul>
+                            <ul>
+                                <li>Total</li>
+                                <li>{numberToPrice(cart.total * cart.qty)}</li>
+                            </ul>
 
-                    <button onClick={addToCart}>Add Cart</button>
+                            <button onClick={addToCart}>Add Cart</button>
+                        </>
+                    ) : (
+                        <h3>Product Not available</h3>
+                    )}
                 </div>
             </div>
         </>
