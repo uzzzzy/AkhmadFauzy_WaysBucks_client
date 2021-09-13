@@ -129,11 +129,11 @@ function Transaction({ modalTransaction, setModal }) {
                     status: e.target.id,
                 })
                     .then((res) => {
-                        setModal({ modal: false })
                         setModal({
-                            modal: true,
+                            modal: false,
+                            reopen: true,
                             modalOpt: 'success',
-                            modalMessage: res.data.data.message,
+                            modalMessage: 'Success',
                         })
                     })
                     .catch((err) => err)

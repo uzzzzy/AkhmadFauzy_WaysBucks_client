@@ -42,6 +42,10 @@ export default function App() {
             setAuthToken()
         }
 
+        if (modal?.reopen === true) {
+            setModal((prevState) => ({ ...prevState }))
+        }
+
         if ((modal?.action === 'updatecart' || !cartCounter) && token) {
             getCartCount(setCartCounter)
         }

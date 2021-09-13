@@ -30,6 +30,7 @@ export default function Dashboard({ setModal }) {
                 order,
             },
         }
+
         if (tab === 'product')
             setTimeout(function () {
                 api.get('/products', query)
@@ -87,12 +88,14 @@ export default function Dashboard({ setModal }) {
     const nextBtn = () => {
         if (page < Math.floor(count / limit) || tab === 'transaction') {
             setPage(page + 1)
+            setFetch(true)
             setList()
         }
     }
     const prevBtn = () => {
         if (page !== 0) {
             setPage(page - 1)
+            setFetch(true)
             setList()
         }
     }
@@ -130,6 +133,9 @@ export default function Dashboard({ setModal }) {
                                         </button>
                                         <button id="approve" onClick={handleFilter}>
                                             Approved
+                                        </button>
+                                        <button id="cancel" onClick={handleFilter}>
+                                            Canceled
                                         </button>
                                         <button id="otw" onClick={handleFilter}>
                                             On The Way
