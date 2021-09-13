@@ -97,7 +97,7 @@ export default function Modal({ modal, setModal, setToken }) {
     } else if (modalOpt === 'transaction') {
         return (
             <div id="modal" className={`modal ${modalOpt}`} onClick={closeModal}>
-                <Transaction modalTransaction={modalTransaction} />
+                <Transaction modalTransaction={modalTransaction} setModal={setModal} />
             </div>
         )
     } else {
@@ -113,8 +113,9 @@ export default function Modal({ modal, setModal, setToken }) {
     }
 }
 
-function Transaction({ modalTransaction }) {
+function Transaction({ modalTransaction, setModal }) {
     const [transaction, setTransaction] = useState({})
+    const [view, setView] = useState(false)
     const [total, setTotal] = useState(0)
     const [tab, setTab] = useState('detail')
     let status = transaction.status === 'waiting' ? 'Waiting Approve' : transaction.status === 'approve' ? 'Waiting Order to be Made' : transaction.status === 'otw' ? 'On The Way' : transaction.status === 'received' ? 'Order Received' : 'Order Canceled'
@@ -123,11 +124,23 @@ function Transaction({ modalTransaction }) {
         switch (e.target.id) {
             case 'cancel':
             case 'approve':
-            case 'send':
-                console.log(e.target.id, transaction.id)
+            case 'otw':
+                api.patch('/transaction/' + transaction.id, {
+                    status: e.target.id,
+                })
+                    .then((res) => {
+                        setModal({ modal: false })
+                        setModal({
+                            modal: true,
+                            modalOpt: 'success',
+                            modalMessage: res.data.data.message,
+                        })
+                    })
+                    .catch((err) => err)
                 break
             default:
                 setTab(e.target.id)
+                break
         }
     }
 
@@ -140,9 +153,10 @@ function Transaction({ modalTransaction }) {
                 })
                 .catch((err) => console.log(err))
     }, [modalTransaction])
+
     return (
         <div className="transaction-container">
-            <div className="row tabcontent">
+            <div className={view ? 'row tabcontent hidden' : 'row tabcontent'}>
                 <button id="detail" className={tab === 'detail' ? 'col tab active' : 'col tab'} onClick={handleBtn}>
                     Detail
                 </button>
@@ -152,9 +166,9 @@ function Transaction({ modalTransaction }) {
             </div>
             {tab === 'detail' ? (
                 <>
-                    <img src={transaction.attachment} alt="transaction" />
+                    <img className={view ? 'attachment view' : 'attachment'} src={transaction.attachment} alt="transaction" onClick={() => setView(!view)} />
                     {transaction.status === 'waiting' ? (
-                        <div className="row">
+                        <div className={view ? 'row hidden' : 'row'}>
                             <button id="approve" className="col approve" onClick={handleBtn}>
                                 Approve
                             </button>
@@ -164,14 +178,14 @@ function Transaction({ modalTransaction }) {
                         </div>
                     ) : (
                         transaction.status === 'approve' && (
-                            <div className="row">
-                                <button id="send" className="col send" onClick={handleBtn}>
+                            <div className={view ? 'row hidden' : 'row'}>
+                                <button id="otw" className="col send" onClick={handleBtn}>
                                     Send Order
                                 </button>
                             </div>
                         )
                     )}
-                    <div className="transaction-detail">
+                    <div className={view ? 'transaction-detail hidden' : 'transaction-detail'}>
                         <h2 className={transaction.status}>{status}</h2>
                         <h2 className="total">{numberToPrice(total)}</h2>
                         <div className="row">
@@ -201,22 +215,22 @@ function Transaction({ modalTransaction }) {
                 <>
                     <div className="row transaction-list">
                         {transaction.orderitems.map((item) => (
-                            <div key={item.id} className="cart-item">
-                                <div className="cart-img">
-                                    <img src={item.product.image} alt={item.product.title} />
-                                </div>
-                                <div className="col cart-detail w-100">
+                            <div key={item.id} className="transaction-item">
+                                <div className="col w-100">
                                     <ul>
-                                        <li>{item.product.title}</li>
                                         <li>
-                                            {item.toppings.length > 0
-                                                ? item?.toppings?.map((tpItem, i) => (
-                                                      <div key={tpItem.id} className="tooltip">
-                                                          <img src={tpItem.image} alt={tpItem.title} />
-                                                          <span className="tooltiptext">{tpItem.title}</span>
-                                                      </div>
-                                                  ))
-                                                : 'No Topping'}
+                                            <h3 className="bold">
+                                                {item.qty} x {item.product.title}
+                                            </h3>
+                                        </li>
+                                        <li>
+                                            {item.toppings.length > 0 && (
+                                                <ul className="topping">
+                                                    {item.toppings.map((toppItem) => (
+                                                        <li key={toppItem.id}>+{toppItem.title}</li>
+                                                    ))}
+                                                </ul>
+                                            )}
                                         </li>
                                     </ul>
                                 </div>

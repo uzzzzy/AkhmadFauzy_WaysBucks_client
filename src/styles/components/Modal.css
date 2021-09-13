@@ -39,12 +39,63 @@
     object-fit: cover;
 }
 
+.modal.transaction .attachment {
+    cursor: pointer;
+}
+
+.modal.transaction .attachment.view {
+    height: auto;
+    min-height: 100vh;
+    display: block;
+    margin: auto;
+    object-fit: contain;
+    width: 60vw;
+    position: absolute;
+    top: 0vh;
+    left: 20vh;
+    right: 20vh;
+}
+
 .modal.transaction .transaction-list {
     padding: 5px;
     max-height: 80vh;
     overflow: hidden;
     overflow-y: auto;
     background-color: white;
+}
+
+.modal.transaction .transaction-list ul {
+    text-align: start;
+}
+
+.transaction-list .transaction-item {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px black;
+    background-color: #bd0707;
+    margin: 20px 0;
+}
+
+.transaction-list .transaction-item > div {
+    margin: 5px 0;
+}
+
+.transaction-list .transaction-item ul > li > h3 {
+    color: white;
+    background-color: #bd0707;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+
+.transaction-list .transaction-item ul > li > ul {
+    background-color: #ffc2c2;
+    color: #bd0707;
+    margin: 0;
+    padding: 5px;
+    margin-left: 15px;
+    border-radius: 5px;
 }
 
 .modal.transaction .cart-img img {

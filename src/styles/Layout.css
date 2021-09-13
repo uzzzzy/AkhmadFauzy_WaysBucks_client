@@ -37,3 +37,7 @@
 .w-25 {
     width: 25%;
 }
+
+.h-80 {
+    height: 80vh !important;
+}

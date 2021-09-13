@@ -11,8 +11,8 @@ const delay = delayTime
 
 export default function Dashboard({ setModal }) {
     const [list, setList] = useState()
-    const [fetch, setFetch] = useState(true)
-
+    const [fetch, setFetch] = useState()
+    const [status, setStatus] = useState()
     const [count, setCount] = useState()
     const [page, setPage] = useState(0)
     const [tab, setTab] = useState('transaction')
@@ -20,15 +20,16 @@ export default function Dashboard({ setModal }) {
     const [item, setItem] = useState()
 
     useEffect(() => {
-        const order = tab === 'transaction' ? 'id,desc' : undefined
+        const order = tab === 'transaction' ? 'createdAt,desc' : undefined
+
         const query = {
             params: {
-                limit: limit,
+                limit,
                 offset: limit * page,
+                status,
                 order,
             },
         }
-
         if (tab === 'product')
             setTimeout(function () {
                 api.get('/products', query)
@@ -59,8 +60,9 @@ export default function Dashboard({ setModal }) {
                     .catch((err) => err)
             }, delay * 1000)
         }
+
         setFetch(false)
-    }, [tab, page, item, fetch])
+    }, [tab, page, item, fetch, status])
 
     const handleTab = (e) => {
         if (e.target.id !== tab) {
@@ -69,14 +71,30 @@ export default function Dashboard({ setModal }) {
             setCount(0)
             setTab(e.target.id)
             setList()
+            setStatus()
+        }
+    }
+
+    const handleFilter = (e) => {
+        if (item !== e.target.id) {
+            setList()
+            setPage(0)
+            setStatus(e.target.id)
+            if (item) setItem()
         }
     }
 
     const nextBtn = () => {
-        if (page < Math.floor(count / limit)) setPage(page + 1)
+        if (page < Math.floor(count / limit) || tab === 'transaction') {
+            setPage(page + 1)
+            setList()
+        }
     }
     const prevBtn = () => {
-        if (page !== 0) setPage(page - 1)
+        if (page !== 0) {
+            setPage(page - 1)
+            setList()
+        }
     }
 
     return (
@@ -95,14 +113,54 @@ export default function Dashboard({ setModal }) {
                 </div>
                 {item ? <Preview item={tab} id={item} fetch={fetch} setFetch={setFetch} /> : null}
                 <div className="app-inner-bar col">
-                    {tab && list?.length > 0 ? (
-                        <div className="tabcontent">
-                            <ul>
-                                {list?.map((item) => (
-                                    <Item key={item.id} tab={tab} item={item} setItem={setItem} setModal={setModal} />
-                                ))}
-                            </ul>
+                    <div className="tab-tool">
+                        <div className="pagination">
+                            <p onClick={prevBtn}>&laquo;</p>
+                            <p>{page + 1}</p>
+                            <p onClick={nextBtn}>&raquo;</p>
                         </div>
+                        <div className="tab-filter">
+                            {tab === 'transaction' ? (
+                                <div className="dropdown">
+                                    <span>Status</span>
+                                    <div className="dropdown-content">
+                                        <button onClick={handleFilter}>All</button>
+                                        <button id="waiting" onClick={handleFilter}>
+                                            Waiting
+                                        </button>
+                                        <button id="approve" onClick={handleFilter}>
+                                            Approved
+                                        </button>
+                                        <button id="otw" onClick={handleFilter}>
+                                            On The Way
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="dropdown">
+                                    <span>Status</span>
+                                    <div className="dropdown-content">
+                                        <button id="available" onClick={handleFilter}>
+                                            Available
+                                        </button>
+                                        <button id="disabled" onClick={handleFilter}>
+                                            Disabled
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    {tab && list?.length > 0 ? (
+                        <>
+                            <div className="tabcontent">
+                                <ul>
+                                    {list?.map((item) => (
+                                        <Item key={item.id} tab={tab} item={item} setItem={setItem} setModal={setModal} />
+                                    ))}
+                                </ul>
+                            </div>
+                        </>
                     ) : list?.length === 0 ? (
                         'noItem'
                     ) : (
@@ -112,14 +170,6 @@ export default function Dashboard({ setModal }) {
                     )}
                 </div>
             </div>
-
-            {count > limit && (
-                <div className="pagination">
-                    <p onClick={prevBtn}>&laquo;</p>
-                    <p>{page + 1}</p>
-                    <p onClick={nextBtn}>&raquo;</p>
-                </div>
-            )}
         </div>
     )
 }

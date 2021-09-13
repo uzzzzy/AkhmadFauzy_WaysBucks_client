@@ -116,7 +116,7 @@ h5 {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .lottie-container {
