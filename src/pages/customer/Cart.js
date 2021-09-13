@@ -9,7 +9,7 @@ import Delete from '../../assets/delete.svg'
 
 import '../../styles/pages/customer/Cart.css'
 
-export default function Cart({ userP: user, setCartCounter, setModal }) {
+export default function Cart({ setCartCounter, setModal }) {
     const [preview, setPreview] = useState()
     const [cart, setCart] = useState()
     const [total, setTotal] = useState({

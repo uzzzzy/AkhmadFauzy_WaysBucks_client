@@ -8,7 +8,7 @@ import QR from '../../assets/qrcode.svg'
 
 import '../../styles/pages/customer/Profile.css'
 
-export default function Profile({ userP: user }) {
+export default function Profile({ user }) {
     const [transactions, setTransactions] = useState()
     useEffect(() => {
         if (!transactions) {
@@ -41,15 +41,38 @@ export default function Profile({ userP: user }) {
             <div className="col transactions">
                 <h2>My Transactions</h2>
                 <div>
-                    {transactions?.map((item) => (
-                        <div key={item?.id}>
+                    {transactions?.map((trans) => (
+                        <div key={trans?.id}>
                             <div className="row transaction-card">
-                                <div className="col">Item List</div>
+                                <div className="col">
+                                    {trans.orderitems.map((item) => (
+                                        <div key={item.id} className="cart-item">
+                                            <div className="cart-img">
+                                                <img src={item.product.image} alt={item.product.title} />
+                                            </div>
+                                            <div className="col cart-detail w-100">
+                                                <ul>
+                                                    <li>{item.product.title}</li>
+                                                    <li>
+                                                        {item.toppings.length > 0
+                                                            ? item?.toppings?.map((tpItem, i) => (
+                                                                  <div key={tpItem.id} className="tooltip">
+                                                                      <img src={tpItem.image} alt={tpItem.title} />
+                                                                      <span className="tooltiptext">{tpItem.title}</span>
+                                                                  </div>
+                                                              ))
+                                                            : 'No Topping'}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                                 <div className="status">
                                     <img className="logo" src={Logo} alt="logo" />
                                     <img className="qr" src={QR} alt="barcode" />
-                                    <p>{item?.status?.toUpperCase()}</p>
-                                    <h5>Sub Total: {numberToPrice(item?.total)}</h5>
+                                    <p>{trans?.status?.toUpperCase()}</p>
+                                    <h5>Sub Total: {numberToPrice(trans?.total)}</h5>
                                 </div>
                             </div>
                         </div>

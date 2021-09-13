@@ -12,8 +12,6 @@ export default function Modal({ modal, setModal, setToken }) {
         email: '',
         password: '',
     })
-    const [transaction, setTransaction] = useState({})
-    const [total, setTotal] = useState(0)
     const [error, setError] = useState()
     let history = useHistory()
 
@@ -24,17 +22,6 @@ export default function Modal({ modal, setModal, setToken }) {
             history.push('/cart')
         }
     }
-
-    useEffect(() => {
-        if (modalTransaction)
-            api.get('/transaction/' + modalTransaction)
-                .then((res) => {
-                    const data = res.data.data.transaction
-                    setTransaction(data)
-                    setTotal(res.data.data.total)
-                })
-                .catch((err) => console.log(err.response.data))
-    }, [modalTransaction])
 
     if (modalOpt === 'login' || modalOpt === 'register') {
         const handleOnChange = (e) => {
@@ -108,15 +95,63 @@ export default function Modal({ modal, setModal, setToken }) {
             </div>
         )
     } else if (modalOpt === 'transaction') {
-        let status = transaction.status === 'waiting' ? 'Waiting Approve' : transaction.status === 'approve' ? 'Approved' : transaction.status === 'otw' ? 'On The Way' : transaction.status === 'received' ? 'Order Received' : 'Canceled'
-
-        const handleBtn = (e) => {
-            console.log(e.target.id, transaction.id)
-        }
-
         return (
             <div id="modal" className={`modal ${modalOpt}`} onClick={closeModal}>
-                <div className="transaction-container">
+                <Transaction modalTransaction={modalTransaction} />
+            </div>
+        )
+    } else {
+        return (
+            <div id="success" className="modal" onClick={closeModal}>
+                <div className="modal-content success">
+                    Add to Cart Success
+                    <br />
+                    {modalOpt}
+                </div>
+            </div>
+        )
+    }
+}
+
+function Transaction({ modalTransaction }) {
+    const [transaction, setTransaction] = useState({})
+    const [total, setTotal] = useState(0)
+    const [tab, setTab] = useState('detail')
+    let status = transaction.status === 'waiting' ? 'Waiting Approve' : transaction.status === 'approve' ? 'Waiting Order to be Made' : transaction.status === 'otw' ? 'On The Way' : transaction.status === 'received' ? 'Order Received' : 'Order Canceled'
+
+    const handleBtn = (e) => {
+        switch (e.target.id) {
+            case 'cancel':
+            case 'approve':
+            case 'send':
+                console.log(e.target.id, transaction.id)
+                break
+            default:
+                setTab(e.target.id)
+        }
+    }
+
+    useEffect(() => {
+        if (modalTransaction)
+            api.get('/transaction/' + modalTransaction)
+                .then((res) => {
+                    setTransaction(res.data.data.transaction)
+                    setTotal(res.data.data.total)
+                })
+                .catch((err) => console.log(err))
+    }, [modalTransaction])
+    return (
+        <div className="transaction-container">
+            <div className="row tabcontent">
+                <button id="detail" className={tab === 'detail' ? 'col tab active' : 'col tab'} onClick={handleBtn}>
+                    Detail
+                </button>
+                <button id="list" className={tab === 'list' ? 'col tab active' : 'col tab'} onClick={handleBtn}>
+                    Order List
+                </button>
+            </div>
+            {tab === 'detail' ? (
+                <>
                     <img src={transaction.attachment} alt="transaction" />
                     {transaction.status === 'waiting' ? (
                         <div className="row">
@@ -161,18 +196,35 @@ export default function Modal({ modal, setModal, setToken }) {
                             </ul>
                         </div>
                     </div>
-                </div>
-            </div>
-        )
-    } else {
-        return (
-            <div id="success" className="modal" onClick={closeModal}>
-                <div className="modal-content success">
-                    Add to Cart Success
-                    <br />
-                    {modalOpt}
-                </div>
-            </div>
-        )
-    }
+                </>
+            ) : (
+                <>
+                    <div className="row transaction-list">
+                        {transaction.orderitems.map((item) => (
+                            <div key={item.id} className="cart-item">
+                                <div className="cart-img">
+                                    <img src={item.product.image} alt={item.product.title} />
+                                </div>
+                                <div className="col cart-detail w-100">
+                                    <ul>
+                                        <li>{item.product.title}</li>
+                                        <li>
+                                            {item.toppings.length > 0
+                                                ? item?.toppings?.map((tpItem, i) => (
+                                                      <div key={tpItem.id} className="tooltip">
+                                                          <img src={tpItem.image} alt={tpItem.title} />
+                                                          <span className="tooltiptext">{tpItem.title}</span>
+                                                      </div>
+                                                  ))
+                                                : 'No Topping'}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )}
+        </div>
+    )
 }

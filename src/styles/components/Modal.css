@@ -34,7 +34,27 @@
 }
 
 .modal.transaction img {
-    width: 50vh;
+    height: 400px;
+    width: 444px;
+    object-fit: cover;
+}
+
+.modal.transaction .transaction-list {
+    padding: 5px;
+    max-height: 80vh;
+    overflow: hidden;
+    overflow-y: auto;
+    background-color: white;
+}
+
+.modal.transaction .cart-img img {
+    height: 80px;
+    width: 80px;
+}
+
+.modal.transaction .tooltip img {
+    height: 40px;
+    width: 40px;
 }
 
 .modal.transaction h2 {
@@ -42,7 +62,7 @@
     padding: 2px;
 }
 
-.waiting {
+.otw {
     color: #00d1ff;
     background-color: rgba(0, 209, 255, 0.1);
 }
@@ -54,10 +74,34 @@
 
 .modal.transaction .transaction-container {
     display: inline-grid;
+    width: 444px;
 }
 
 .transaction-container .row {
     grid-gap: 0;
+}
+
+.transaction-container .row.tabcontent {
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+}
+
+.transaction-container .row.tabcontent .tab {
+    margin-bottom: 0;
+    border-radius: 0;
+    color: #bd0707;
+    text-align: center;
+    justify-content: center;
+}
+
+.transaction-container .row.tabcontent .tab:hover {
+    color: white;
+}
+
+.transaction-container .row.tabcontent .tab.active {
+    color: white;
+    background-color: #bd0707;
 }
 
 .transaction-container button {

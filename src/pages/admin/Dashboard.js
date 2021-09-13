@@ -20,10 +20,12 @@ export default function Dashboard({ setModal }) {
     const [item, setItem] = useState()
 
     useEffect(() => {
+        const order = tab === 'transaction' ? 'id,desc' : undefined
         const query = {
             params: {
                 limit: limit,
                 offset: limit * page,
+                order,
             },
         }
 
@@ -47,16 +49,16 @@ export default function Dashboard({ setModal }) {
                     .catch((err) => err)
             }, delay * 1000)
 
-        if (tab === 'transaction')
+        if (tab === 'transaction') {
             setTimeout(function () {
                 api.get('/transactions', query)
                     .then((res) => {
-                        console.log(res.data.data)
                         setCount(0)
                         setList(res.data.data.transactions)
                     })
                     .catch((err) => err)
             }, delay * 1000)
+        }
         setFetch(false)
     }, [tab, page, item, fetch])
 
