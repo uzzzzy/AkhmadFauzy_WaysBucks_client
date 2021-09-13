@@ -6,7 +6,7 @@ import { numberToPrice } from '../functions'
 
 import '../styles/components/Modal.css'
 
-export default function Modal({ modal, setModal, setToken }) {
+export default function Modal({ modal, setModal, setToken, setData }) {
     const { user, modalOpt, modalMessage, modalTransaction } = modal
     const [form, setForm] = useState({
         email: '',
@@ -97,7 +97,7 @@ export default function Modal({ modal, setModal, setToken }) {
     } else if (modalOpt === 'transaction') {
         return (
             <div id="modal" className={`modal ${modalOpt}`} onClick={closeModal}>
-                <Transaction modalTransaction={modalTransaction} setModal={setModal} user={user} />
+                <Transaction modalTransaction={modalTransaction} setModal={setModal} user={user} setData={setData} />
             </div>
         )
     } else {
@@ -113,7 +113,7 @@ export default function Modal({ modal, setModal, setToken }) {
     }
 }
 
-function Transaction({ user, modalTransaction, setModal }) {
+function Transaction({ user, modalTransaction, setModal, setData }) {
     const [transaction, setTransaction] = useState({})
     const [view, setView] = useState(false)
     const [total, setTotal] = useState(0)
@@ -130,12 +130,14 @@ function Transaction({ user, modalTransaction, setModal }) {
                     status: e.target.id,
                 })
                     .then((res) => {
-                        setModal({
-                            modal: false,
-                            reopen: true,
-                            modalOpt: 'success',
-                            modalMessage: 'Success',
-                        })
+                        setTransaction((prevState) => ({ ...prevState, status: e.target.id }))
+                        // setModal({
+                        //     modal: true,
+                        //     reopen: true,
+                        //     modalOpt: 'success',
+                        //     modalMessage: 'success',
+                        // })
+                        setData(e.target.id)
                     })
                     .catch((err) => err)
                 break

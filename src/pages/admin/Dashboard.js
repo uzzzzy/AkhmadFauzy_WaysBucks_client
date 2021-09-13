@@ -9,9 +9,9 @@ import '../../styles/pages/admin/Dashboard.css'
 const limit = 4
 const delay = delayTime
 
-export default function Dashboard({ setModal }) {
+export default function Dashboard({ data, setData, setModal }) {
     const [list, setList] = useState()
-    const [fetch, setFetch] = useState()
+    const [fetch, setFetch] = useState(true)
     const [status, setStatus] = useState('')
     const [count, setCount] = useState()
     const [page, setPage] = useState(0)
@@ -31,6 +31,12 @@ export default function Dashboard({ setModal }) {
                 status,
                 order,
             },
+        }
+
+        if (data) {
+            setData()
+            setFetch(true)
+            setList()
         }
 
         if (tab === 'product')
@@ -63,40 +69,41 @@ export default function Dashboard({ setModal }) {
                     .catch((err) => err)
             }, delay * 1000)
         }
-        if (fetch) setFetch(false)
-    }, [tab, page, item, fetch, status])
+    }, [tab, page, item, fetch, status, data, setData])
 
     const handleTab = (e) => {
         if (e.target.id !== tab) {
+            setFetch(true)
             setPage(0)
-            setItem()
-            setCount(0)
             setTab(e.target.id)
             setList()
+            setItem()
+            setCount(0)
             setStatus('')
         }
     }
 
     const handleFilter = (e) => {
         if (status !== e.target.id) {
-            setList()
+            setFetch(true)
             setPage(0)
+            setList()
             setStatus(e.target.id)
         }
     }
 
     const nextBtn = () => {
         if (count !== limit && page < Math.floor(count / limit)) {
-            setPage(page + 1)
             setFetch(true)
+            setPage(page + 1)
             setList()
         }
     }
 
     const prevBtn = () => {
         if (page !== 0) {
-            setPage(page - 1)
             setFetch(true)
+            setPage(page - 1)
             setList()
         }
     }
@@ -147,6 +154,9 @@ export default function Dashboard({ setModal }) {
                                         <button id="otw" onClick={handleFilter}>
                                             On The Way
                                         </button>
+                                        <button id="receive" onClick={handleFilter}>
+                                            Received
+                                        </button>
                                     </div>
                                 </div>
                             ) : (
@@ -165,7 +175,7 @@ export default function Dashboard({ setModal }) {
                             )}
                         </div>
                     </div>
-                    {tab && list?.length > 0 ? (
+                    {list?.length > 0 ? (
                         <>
                             <div className="tabcontent">
                                 <ul>
@@ -175,11 +185,11 @@ export default function Dashboard({ setModal }) {
                                 </ul>
                             </div>
                         </>
-                    ) : list?.length === 0 ? null : (
+                    ) : fetch ? (
                         <div className="lottie-container">
                             <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_YMim6w.json" background="transparent" speed="1" loop autoplay />
                         </div>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </div>

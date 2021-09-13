@@ -2,7 +2,7 @@ const { api } = require('../config/api')
 
 const formatter = Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 })
 
-exports.delayTime = 2
+exports.delayTime = 1
 
 exports.numberToPrice = (val) => {
     return formatter.format(val).replace(/,/g, '.')

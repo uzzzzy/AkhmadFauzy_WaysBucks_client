@@ -21,6 +21,7 @@ import './styles/Layout.css'
 export default function App() {
     const [modal, setModal] = useState()
     const [token, setToken] = useState()
+    const [data, setData] = useState()
     const [cartCounter, setCartCounter] = useState()
     const [user, setUser] = useState()
 
@@ -42,10 +43,6 @@ export default function App() {
             setAuthToken()
         }
 
-        if (modal?.reopen === true) {
-            setModal((prevState) => ({ ...prevState }))
-        }
-
         if ((modal?.action === 'updatecart' || !cartCounter) && token) {
             getCartCount(setCartCounter)
         }
@@ -58,7 +55,7 @@ export default function App() {
                 <main>
                     <Switch>
                         <Route exact path="/">
-                            {user?.status === 'admin' ? <Dashboard setModal={setModal} /> : <Landing token={token} user={user} setModal={setModal} />}
+                            {user?.status === 'admin' ? <Dashboard setModal={setModal} data={data} setData={setData} /> : <Landing token={token} user={user} setModal={setModal} />}
                         </Route>
                         <PrivateRoute role="admin" path="/:mod-:item/:id?" user={user} component={AddOrUpdateItem} setModal={setModal} />
                         <PrivateRoute path="/product/:id" user={user} component={Product} setModal={setModal} />
@@ -72,7 +69,7 @@ export default function App() {
                     </Switch>
                 </main>
             </div>
-            {modal?.modal ? <Modal modal={modal} setModal={setModal} setToken={setToken} /> : null}
+            {modal?.modal ? <Modal modal={modal} setModal={setModal} setToken={setToken} setData={setData} /> : null}
         </Router>
     )
 }

@@ -66,7 +66,9 @@ export default function Landing({ user, setModal }) {
                 <div>
                     <h1>Outlet</h1>
                 </div>
-                <div className="map-container">{/* <iframe title="waysbucks-map" className="map" src="https://www.google.com/maps/d/embed?mid=1L0TqjVR1iPiwGEGzgKmeysCl2Rtl6HYf" /> */}</div>
+                <div className="map-container">
+                    <iframe title="my-map" loading="lazy" className="map" src="https://www.google.com/maps/d/embed?mid=1L0TqjVR1iPiwGEGzgKmeysCl2Rtl6HYf" />
+                </div>
             </section>
         </>
     )

@@ -152,6 +152,12 @@
     border: none;
 }
 
+.transaction-container > .row button {
+    font-size: 20pt;
+    padding: 10px;
+    border: none;
+}
+
 .transaction-container button.approve {
     color: #058405;
     background-color: #b5fcb5;
