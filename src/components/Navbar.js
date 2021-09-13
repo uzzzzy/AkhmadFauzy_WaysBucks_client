@@ -35,9 +35,6 @@ export default function Navbar({ modal, token, user, setToken, setModal, cartCou
                     modalOpt: 'register',
                 })
                 break
-            case 'message':
-                history.push('/message')
-                break
             case 'logo':
                 history.push('/')
                 break
@@ -98,10 +95,6 @@ export default function Navbar({ modal, token, user, setToken, setModal, cartCou
                             {dropdown ? (
                                 <div id="dropdown" className="dropdown">
                                     <ul>
-                                        <li onClick={() => handleBtn('message')}>
-                                            <img src={IconChat} className="dropdown-icon" alt="Add Product" />
-                                            <span>Message</span>
-                                        </li>
                                         {user?.status === 'admin' ? (
                                             <>
                                                 <li onClick={() => handleBtn('product')}>

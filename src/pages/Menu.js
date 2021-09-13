@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-
 import MenuCard from '../components/MenuCard'
 
 import { api } from '../config/api'
