@@ -60,7 +60,7 @@ export default function App() {
                             {user?.status === 'admin' ? <Dashboard setModal={setModal} data={data} setData={setData} /> : <Landing token={token} user={user} setModal={setModal} />}
                         </Route>
 
-                        <Route path="/menu">{user?.status !== 'admin' ? <Menu /> : <NotFound />}</Route>
+                        <Route path="/menu">{user?.status !== 'admin' ? <Menu user={user} setModal={setModal} /> : <NotFound />}</Route>
                         <PrivateRoute role="admin" path="/:mod-:item/:id?" user={user} component={AddOrUpdateItem} setModal={setModal} />
                         <PrivateRoute path="/product/:id" user={user} component={Product} setModal={setModal} />
                         <PrivateRoute path="/cart" user={user} component={Cart} setModal={setModal} setCartCounter={setCartCounter} />
