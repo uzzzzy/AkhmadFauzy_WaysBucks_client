@@ -52,7 +52,7 @@ export default function TransactionModal({ user, modalTransaction, setModal, set
             </div>
             {tab === 'detail' ? (
                 <>
-                    <img className={view ? 'attachment view' : 'attachment'} src={transaction.attachment} alt="transaction" onClick={() => setView(!view)} />
+                    {!user && <img className={view ? 'attachment view' : 'attachment'} src={transaction.attachment} alt="transaction" onClick={() => setView(!view)} />}
                     {transaction.status === 'waiting' && !user ? (
                         <div className={view ? 'row hidden' : 'row'}>
                             <button id="approve" className="col approve" onClick={handleBtn}>

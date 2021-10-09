@@ -38,6 +38,7 @@ export default function Dashboard({ data, setData, setModal }) {
                 limit,
                 offset: limit * page,
                 status,
+                order: 'createdAt,desc',
             },
         }
 

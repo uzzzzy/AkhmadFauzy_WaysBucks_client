@@ -157,7 +157,11 @@ nav ul li .btn {
 }
 
 .dropdown span {
-    margin-left: 10px;
-    vertical-align: middle;
-    color: black;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
+
+    /* identical to box height */
+
+    color: #000000;
 }

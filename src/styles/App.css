@@ -25,8 +25,8 @@
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #bd0707;
+    color: #fff !important;
+    background-color: #bd0707 !important;
 }
 
 /* button action */

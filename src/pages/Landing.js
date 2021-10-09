@@ -36,7 +36,7 @@ export default function Landing({ user, setModal }) {
                         backgroundSize: 'cover',
                     }}
                     className="jumbotron">
-                    <h1>WAYSBUCK</h1>
+                    <h1>WAYSBUCKS</h1>
                     <br />
                     <h3>Things are changing, but we’re still here for you</h3>
                     <br />

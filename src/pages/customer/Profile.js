@@ -8,22 +8,25 @@ import QR from '../../assets/qrcode.svg'
 
 import '../../styles/pages/customer/Profile.css'
 
-export default function Profile({ user, setUser, setModal }) {
+export default function Profile({ user, setUser, setModal, data, setData }) {
     const [transactions, setTransactions] = useState()
     const [edit, setEdit] = useState(false)
     const [preview, setPreview] = useState(user?.image)
     useEffect(() => {
-        if (!transactions) {
+        if (!transactions || data) {
             api.get('/transactions', {
                 params: {
                     order: 'id,desc',
                     attributes: 'id,status',
                 },
             })
-                .then((res) => setTransactions(res.data.data.transactions))
+                .then((res) => {
+                    setTransactions(res.data.data.transactions)
+                    setData()
+                })
                 .catch((err) => err)
         }
-    }, [transactions])
+    }, [transactions, data])
 
     const handleOnChange = (e) => {
         if (e.target.type === 'file') {
@@ -34,13 +37,15 @@ export default function Profile({ user, setUser, setModal }) {
 
     const handleSave = (e) => {
         e.preventDefault()
-        if (e.target.id === 'submit' || e.target.elements.image.files[0] || e.target.elements.fullName.value || e.target.elements.email.value) {
+        if (e.target.id === 'submit' || e.target.elements.image.files[0] || e.target.elements.fullName || e.target.elements.email) {
             let formData = new FormData()
 
-            formData.append('image', e.target.elements.image?.files[0])
-            formData.append('fullName', e.target.elements.fullName?.value)
-            formData.append('email', e.target.elements.email?.value)
+            if (e.target.elements.image.files[0]) formData.append('image', e.target.elements.image.files[0])
+            if (e.target.elements.fullName?.value) formData.append('fullName', e.target.elements.fullName.value)
+            if (e.target.elements.email?.value) formData.append('email', e.target.elements.email.value)
 
+            if (e.target.elements.email?.value) setUser((prevState) => ({ ...prevState, email: e.target.elements.email.value }))
+            if (e.target.elements.fullName?.value) setUser((prevState) => ({ ...prevState, fullName: e.target.elements.fullName.value }))
             api.patch('/user', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -48,8 +53,6 @@ export default function Profile({ user, setUser, setModal }) {
             })
                 .then((res) => {
                     setUser((prevState) => ({ ...prevState, image: preview }))
-                    if (e.target.elements.email) setUser((prevState) => ({ ...prevState, email: e.target.elements.fullName?.value }))
-                    if (e.target.elements.fullName) setUser((prevState) => ({ ...prevState, fullName: e.target.elements.fullName?.value }))
                     setModal({ modal: true, modalOpt: 'success', modalMessage: res.data.data.message })
                 })
                 .catch((error) => {
@@ -142,7 +145,7 @@ export default function Profile({ user, setUser, setModal }) {
                                             <p className={trans.status}>{trans.status === 'waiting' ? 'Waiting Approve' : trans.status === 'approve' ? 'Waiting Order to be Made' : trans.status === 'otw' ? 'On The Way' : trans.status === 'receive' ? 'Order Received' : 'Order Canceled'}</p>
 
                                             <button
-                                                className="btn-primary"
+                                                className="btn btn-primary"
                                                 onClick={() =>
                                                     setModal({
                                                         modal: true,
@@ -151,7 +154,7 @@ export default function Profile({ user, setUser, setModal }) {
                                                         user: true,
                                                     })
                                                 }>
-                                                View Order
+                                                Detail Order
                                             </button>
                                         </>
                                     )}

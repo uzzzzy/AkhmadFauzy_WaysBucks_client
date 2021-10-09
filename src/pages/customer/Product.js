@@ -72,7 +72,7 @@ export default function Product({ setModal }) {
         <>
             <div className="menu">
                 <div className="menu-header">
-                    <h2></h2>
+                    <h2> </h2>
                     <Link to="/menu">Go to Menu &raquo;</Link>
                 </div>
             </div>

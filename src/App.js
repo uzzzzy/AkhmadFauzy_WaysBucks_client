@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 
 import { api, setAuthToken } from './config/api'
 import { getCartCount } from './functions'
@@ -10,7 +10,6 @@ import PrivateRoute from './components/PrivateRoute'
 
 import Landing from './pages/Landing'
 import Product from './pages/customer/Product'
-import Message from './pages/Message'
 import Dashboard from './pages/admin/Dashboard'
 import Profile from './pages/customer/Profile'
 import AddOrUpdateItem from './pages/admin/AddOrUpdateItem'
@@ -64,7 +63,7 @@ export default function App() {
                         <PrivateRoute role="admin" path="/:mod-:item/:id?" user={user} component={AddOrUpdateItem} setModal={setModal} />
                         <PrivateRoute path="/product/:id" user={user} component={Product} setModal={setModal} />
                         <PrivateRoute path="/cart" user={user} component={Cart} setModal={setModal} setCartCounter={setCartCounter} />
-                        <PrivateRoute path="/profile" user={user} setUser={setUser} setModal={setModal} component={Profile} />
+                        <PrivateRoute path="/profile" user={user} setUser={setUser} setModal={setModal} data={data} setData={setData} component={Profile} />
                         <Route>
                             <NotFound />
                         </Route>

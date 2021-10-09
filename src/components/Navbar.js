@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import Logo from '../assets/logo.svg'
-import IconChat from '../assets/chat.svg'
 import IconUser from '../assets/user-icon.svg'
 import IconProduct from '../assets/add-product.svg'
 import IconTopping from '../assets/add-topping.svg'
